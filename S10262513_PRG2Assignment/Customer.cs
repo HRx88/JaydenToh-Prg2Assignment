@@ -38,12 +38,15 @@ namespace S10262513_PRG2Assignment
 
         public Order MakeOrder()
         {
-            return CurrentOrder;
+            if (CurrentOrder == null)
+            {
+                CurrentOrder = new Order();
+            }
         }
 
         public bool IsBirthday()
         {
-            return false;
+           return DateTime.Today.Month == Dob.Month && DateTime.Today.Day == Dob.Day;
         }
 
         public override string ToString()

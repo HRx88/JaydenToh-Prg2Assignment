@@ -35,13 +35,36 @@ namespace S10262513_PRG2Assignment
 
         public void AddIceCream(IceCream iceCream)
         {
-            IceCreamList.Remove(iceCream);
+            IceCreamList.Add(iceCream);
         }
         public void DeleteIceCream(int id)
         {
-            
+            IceCreamList.RemoveAt(id);
         }
-        public double CalculateTotal() { return 0; }
+        public double CalculateTotal() 
+        {
+            double total = 0;
+            for (int i = 0; i < IceCreamList.Count; i++)
+            {
+                IceCream iceCream = IceCreamList[i];
+                if(iceCream is Cup)
+                {
+                    Cup cp = (Cup)iceCream;
+                    total += cp.CalculatePrice();
+                }
+                else if(iceCream is Cone)
+                {
+                    Cone ce = (Cone)iceCream;
+                    total += ce.CalculatePrice();
+                }
+                else if (iceCream is Waffle)
+                {
+                    Waffle w= (Waffle)iceCream;
+                    total += w.CalculatePrice();
+                }
+            }
+            return total;
+        }
 
         public override string ToString() 
         {
