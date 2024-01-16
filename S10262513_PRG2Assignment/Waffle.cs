@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace S10262513_PRG2Assignment
 {
-    class Waffle:IceCream
+    //==========================================================
+    // Student Number : S10262513
+    // Student Name : Tan Hong Rong
+    // Partner Name : Jayden Toh Xuan Ming
+    //==========================================================
+    class Waffle :IceCream
     {
         public string WaffleFlavour { get; set; }
 
