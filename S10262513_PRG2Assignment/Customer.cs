@@ -46,8 +46,9 @@ namespace S10262513_PRG2Assignment
         {
             if (CurrentOrder == null)
             {
-                CurrentOrder = new Order();
+                
             }
+            return CurrentOrder;
         }
 
         public bool IsBirthday()
