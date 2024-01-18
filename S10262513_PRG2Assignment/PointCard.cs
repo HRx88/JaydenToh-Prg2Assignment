@@ -61,7 +61,15 @@ namespace S10262513_PRG2Assignment
             }
         }
 
-        public void Punch() { }
+        public void Punch() 
+        {
+            PunchCard+= 1;
+            if(PunchCard==10)
+            {
+                PunchCard=0;
+            }
+            
+        }
 
         public override string ToString()
         {
