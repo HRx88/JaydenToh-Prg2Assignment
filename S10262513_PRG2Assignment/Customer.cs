@@ -44,16 +44,23 @@ namespace S10262513_PRG2Assignment
 
         public Order MakeOrder()
         {
-            if (CurrentOrder == null)
-            {
-                
-            }
+            CurrentOrder.IceCreamList = new List<IceCream>();
+            
+            Rewards.Punch();
             return CurrentOrder;
         }
 
         public bool IsBirthday()
         {
-           return DateTime.Today.Month == Dob.Month && DateTime.Today.Day == Dob.Day;
+            if (DateTime.Today.Month == Dob.Month && DateTime.Today.Day == Dob.Day)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+          
         }
 
         public override string ToString()

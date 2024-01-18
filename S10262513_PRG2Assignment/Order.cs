@@ -31,7 +31,7 @@ namespace S10262513_PRG2Assignment
         {
             Id = id;
             TimeReceived = tr;
-            TimeFulfilled = DateTime.MinValue;
+            
             
         }
         public void ModifyIceCream(int id)
