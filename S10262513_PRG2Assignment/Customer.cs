@@ -36,15 +36,18 @@ namespace S10262513_PRG2Assignment
             Name = n;
             MemberId = m;
             Dob = d;
-            CurrentOrder = new Order();
-            Rewards = new PointCard();
+           
 
 
         }
 
         public Order MakeOrder()
         {
+            Order order = new Order();
+            OrderHistory.Add(order);
+            CurrentOrder = order;
             CurrentOrder.IceCreamList = new List<IceCream>();
+            CurrentOrder.TimeFulfilled=DateTime.Now;
             
             Rewards.Punch();
             return CurrentOrder;
@@ -65,7 +68,7 @@ namespace S10262513_PRG2Assignment
 
         public override string ToString()
         {
-            return "Name: "+Name+"\tMemberId: "+MemberId+"\tDOB: "+Dob+ "\tCurrentOrder: "+CurrentOrder+ "\tRewards: "+Rewards;
+            return "Name: "+Name+"\tMemberId: "+MemberId+"\tDOB: "+Dob.ToString("dd/MM/yyyy")+ "\tCurrentOrder: "+CurrentOrder+ "\tRewards: "+Rewards;
         }
     }
 }

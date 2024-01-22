@@ -8,7 +8,33 @@ using System.IO;
 // Student Name : Tan Hong Rong
 // Partner Name : Jayden Toh Xuan Ming
 //==========================================================
+void Menu()
+{
 
+}
+//1)Display order details of a customer
+List<Customer>customersList=new List<Customer>();
+void Listallcustomers()
+{
+    using (StreamReader sr = new StreamReader("customers.csv"))
+    {
+        string? s = sr.ReadLine();
+        while ((s = sr.ReadLine()) != null)
+        {
+            string[] data = s.Split(',');
+            string name = data[0];
+            int id = Convert.ToInt32(data[1]);
+            DateTime dob = Convert.ToDateTime(data[2]);
+            customersList.Add(new Customer(name, id, dob));
+
+        }
+    }
+}
+Listallcustomers();
+foreach (Customer customer in customersList)
+{
+    Console.WriteLine(customer);
+}
 //2) List all current orders
 //display the information of all current orders in both the gold members and regular queue
 Queue<Customer>orders = new Queue<Customer>();
@@ -36,6 +62,8 @@ void DisplaycOrders()
             string t2 = data[12];
             string t3 = data[13];
             string t4 = data[14];
+
+
 
 
 
