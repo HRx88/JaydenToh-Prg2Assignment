@@ -10,78 +10,125 @@ using System.Collections;
 // Partner Name : Jayden Toh Xuan Ming
 //==========================================================
 
-// Jayden Menu sssssssss
-void Menu()
+class Program
 {
-    List<Customer> customersList = new List<Customer>();
-
-}
-//1)Display order details of a customer
-List<Customer>customersList=new List<Customer>();
-void Listallcustomers()
-{
-    using (StreamReader sr = new StreamReader("customers.csv"))
+    static List<Customer> customersList = new List<Customer>();
+    static Queue<Customer> orders = new Queue<Customer>();
+    static void DisplayMenu()
     {
-        string? s = sr.ReadLine();
-        while ((s = sr.ReadLine()) != null)
-        {
-            string[] data = s.Split(',');
-            string name = data[0];
-            int id = Convert.ToInt32(data[1]);
-            DateTime dob = Convert.ToDateTime(data[2]);
-            customersList.Add(new Customer(name, id, dob));
+        // Your menu logic goes here
+        Console.WriteLine("---------------- Menu -----------------");
+        Console.WriteLine("[1] List All Customers");
+        Console.WriteLine("[2] Register a New Customer");
+        Console.WriteLine("[3] Create a Customer's Order");
+        Console.WriteLine("[4]Display Order Details of a Customer");
+        Console.WriteLine("[5] Modify Order Details");
+        Console.WriteLine("[0] Exit");
+        Console.WriteLine("--------------------------------------");
+    }
 
-        }
-
-        foreach (Customer customer in customersList)
+    static void Main()
+    {
+        string choice;
+        while (true)
         {
-            Console.WriteLine(customer);
+            DisplayMenu();
+
+            Console.Write("Enter Your Option: ");
+            choice = Console.ReadLine();
+
+            if (choice == "1")
+            {
+                Listallcustomers();
+            }
+
+            else if (choice == "2")
+            {
+
+            }
+
+            else if (choice == "3")
+            {
+
+            }
+
+            else if (choice == "4")
+            {
+
+            }
+
+            else if (choice == "5")
+            {
+
+            }
+
+            else if (choice == "6")
+            {
+
+            }
         }
     }
-}
-Listallcustomers();
 
-//2) List all current orders
-//display the information of all current orders in both the gold members and regular queue
-Queue<Customer>orders = new Queue<Customer>();
-void DisplaycOrders()
-{
-    /// read data from "orders.csv" 
-    using (StreamReader sr = new StreamReader("orders.csv"))
+
+    // 1) Display order details of a customer
+    static void Listallcustomers()
     {
-        string? s = sr.ReadLine();// read the heading and discard
-        while ((s=sr.ReadLine())!= null)
+        using (StreamReader sr = new StreamReader("customers.csv"))
         {
-            string[]data = s.Split(',');
-            int id= Convert.ToInt32(data[0]);
-            int memid= Convert.ToInt32(data[1]);
-            DateTime tr =Convert.ToDateTime(data[2]);
-            DateTime tf = Convert.ToDateTime(data[3]);
-            string option = data[4];
-            int scoop = Convert.ToInt32(data[5]);
-            bool dipped = Convert.ToBoolean(data[6]);
-            string waffleflavour = data[7];
-            string f1 = data[8];
-            string f2 = data[9];
-            string f3 = data[10];
-            string t1 = data[11];
-            string t2 = data[12];
-            string t3 = data[13];
-            string t4 = data[14];
+            string? s = sr.ReadLine(); // Read the heading and discard
+            while ((s = sr.ReadLine()) != null)
+            {
+                string[] data = s.Split(',');
+                string name = data[0];
+                int id = Convert.ToInt32(data[1]);
+                DateTime dob = Convert.ToDateTime(data[2]);
+                customersList.Add(new Customer(name, id, dob));
+            }
 
-
-
+            foreach (Customer customer in customersList)
+            {
+                Console.WriteLine(customer);
+            }
         }
     }
-}
-//5)Display order details of a customer
-// list the customers
-// prompt user to select a customer and retrieve the selected customer
-// retrieve all the order objects of the customer, past and current
-// for each order, display all the details of the order including datetime received, datetime
-//fulfilled (if applicable) and all ice cream details associated with the order
-void Display_order_details_of_a_customer()
-{
-    Listallcustomers();
-    Console.WriteLine("select a customer: ");
+
+    // 2) List all current orders
+    // Display the information of all current orders in both the gold members and regular queue
+    static void DisplayOrders()
+    {
+        using (StreamReader sr = new StreamReader("orders.csv"))
+        {
+            string? s = sr.ReadLine(); // Read the heading and discard
+            while ((s = sr.ReadLine()) != null)
+            {
+                string[] data = s.Split(',');
+                int id = Convert.ToInt32(data[0]);
+                int memid = Convert.ToInt32(data[1]);
+                DateTime tr = Convert.ToDateTime(data[2]);
+                DateTime tf = Convert.ToDateTime(data[3]);
+                string option = data[4];
+                int scoop = Convert.ToInt32(data[5]);
+                bool dipped = Convert.ToBoolean(data[6]);
+                string waffleflavour = data[7];
+                string f1 = data[8];
+                string f2 = data[9];
+                string f3 = data[10];
+                string t1 = data[11];
+                string t2 = data[12];
+                string t3 = data[13];
+                string t4 = data[14];
+
+                // Process order data as needed
+            }
+        }
+    }
+
+    // 5) Display order details of a customer
+    // List the customers, prompt the user to select a customer, and retrieve order details
+    static void DisplayOrderDetailsOfCustomer()
+    {
+        Listallcustomers();
+        Console.WriteLine("Select a customer: ");
+        // Additional logic for retrieving and displaying order details
+    }
 }
