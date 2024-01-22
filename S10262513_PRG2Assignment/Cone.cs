@@ -40,7 +40,7 @@ namespace S10262513_PRG2Assignment
             switch (base.Scoops)
             {
                 case 2:
-                    if (Dipped)
+                    if (Dipped)//need put ==true???
                     {
                         price += 5.50 + 2;
                         return price;

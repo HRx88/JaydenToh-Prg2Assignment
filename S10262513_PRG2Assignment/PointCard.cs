@@ -29,24 +29,26 @@ namespace S10262513_PRG2Assignment
         {
             Points = ps;
             PunchCard = pc;
-            if (Points >= 100)
-            {
-                Tier = "Gold";
-            }
-            else if (Points >= 50)
-            {
-                Tier = "Silver";
-            }
-            else
-            {
-                Tier = "Ordinary";
-            }
+            
         }
 
         public void AddPoints(int amt)
         {
             
             Points =Convert.ToInt32(Math.Floor(amt * 0.72));
+            
+            if (Points >= 100 && Tier== "Silver")
+            {
+                Tier = "Gold";
+            }
+            else if (Points >= 50 && Tier== "Ordinary")
+            {
+                Tier = "Silver";
+            }
+            else
+            {// can jump over 1 tier?
+                Tier = "Ordinary";
+            }
         }
 
         public void RedeemPoints(int ps) 
@@ -64,7 +66,7 @@ namespace S10262513_PRG2Assignment
         public void Punch() 
         {
             PunchCard+= 1;
-            if(PunchCard==10)
+            if(PunchCard>10)
             {
                 PunchCard=0;
                 

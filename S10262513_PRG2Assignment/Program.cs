@@ -40,7 +40,7 @@ Listallcustomers();
 
 //2) List all current orders
 //display the information of all current orders in both the gold members and regular queue
-Queue<Customer>orders = new Queue<Customer>();
+
 void DisplaycOrders()
 {
     /// read data from "orders.csv" 
@@ -66,7 +66,9 @@ void DisplaycOrders()
             string t3 = data[13];
             string t4 = data[14];
 
-
+            
+           
+            
 
         }
     }
@@ -81,4 +83,12 @@ void Display_order_details_of_a_customer()
 {
     Listallcustomers();
     Console.WriteLine("select a customer: ");
+    int id = Convert.ToInt32( Console.ReadLine());
+    for (int i = 0;i<customersList.Count;i++)
+    {
+       if(customersList[i].MemberId == id)
+       {
+            customersList[i].CurrentOrder
+       }
+    }
 }
