@@ -36,6 +36,7 @@ namespace S10262513_PRG2Assignment
             Name = n;
             MemberId = m;
             Dob = d;
+            Rewards = new PointCard();
            
 
 
@@ -44,12 +45,10 @@ namespace S10262513_PRG2Assignment
         public Order MakeOrder()
         {
             Order order = new Order();
-            OrderHistory.Add(order);
-            CurrentOrder = order;
-            CurrentOrder.IceCreamList = new List<IceCream>();
-            CurrentOrder.TimeFulfilled=DateTime.Now;
             
-            Rewards.Punch();
+            CurrentOrder = order;
+            
+
             return CurrentOrder;
         }
 
