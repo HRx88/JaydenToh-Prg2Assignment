@@ -10,6 +10,7 @@ using System.IO;
 //==========================================================
 void Menu()
 {
+    List<Customer> customersList = new List<Customer>();
 
 }
 //1)Display order details of a customer
