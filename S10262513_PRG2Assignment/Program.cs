@@ -8,6 +8,8 @@ using System.IO;
 // Student Name : Tan Hong Rong
 // Partner Name : Jayden Toh Xuan Ming
 //==========================================================
+
+// Menu Button
 void Menu()
 {
     List<Customer> customersList = new List<Customer>();
