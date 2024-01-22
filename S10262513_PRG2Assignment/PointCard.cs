@@ -69,7 +69,7 @@ namespace S10262513_PRG2Assignment
             if(PunchCard>10)
             {
                 PunchCard=0;
-                
+                Console.WriteLine("yay! free iceCream");
             }
             
         }

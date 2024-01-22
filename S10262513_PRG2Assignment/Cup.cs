@@ -13,9 +13,9 @@ namespace S10262513_PRG2Assignment
     //==========================================================
     class Cup :IceCream
     {
-        Cup() { }
+       public Cup() { }
 
-        Cup(string o, int s, List<Flavour> f, List<Topping> t):base(o, s, f, t) 
+        public Cup(string o, int s, List<Flavour> f, List<Topping> t):base(o, s, f, t) 
         {
 
         }

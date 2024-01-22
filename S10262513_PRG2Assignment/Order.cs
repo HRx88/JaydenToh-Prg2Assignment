@@ -36,7 +36,7 @@ namespace S10262513_PRG2Assignment
         }
         public void ModifyIceCream(int id)
         {
-            Console.WriteLine("choose an existing ice cream object to modify");
+            Console.WriteLine("[1]choose an existing ice cream object to modify");
 
         }
 
