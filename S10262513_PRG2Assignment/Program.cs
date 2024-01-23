@@ -30,43 +30,50 @@ class Program
 
     static void Main()
     {
-        string choice;
-        while (true)
+        try
         {
-            DisplayMenu();
-
-            Console.Write("Enter Your Option: ");
-            choice = Console.ReadLine();
-
-            if (choice == "1")
+            string choice;
+            while (true)
             {
-                Listallcustomers();
+                DisplayMenu();
+
+                Console.Write("Enter Your Option: ");
+                choice = Console.ReadLine();
+
+                if (choice == "1")
+                {
+                    Listallcustomers();
+                }
+
+                else if (choice == "2")
+                {
+                    DisplayOrders();
+                }
+
+                else if (choice == "3")
+                {
+
+                }
+
+                else if (choice == "4")
+                {
+
+                }
+
+                else if (choice == "5")
+                {
+                    DisplayOrderDetailsOfCustomer();
+                }
+
+                else if (choice == "6")
+                {
+
+                }
             }
-
-            else if (choice == "2")
-            {
-                DisplayOrders();
-            }
-
-            else if (choice == "3")
-            {
-                
-            }
-
-            else if (choice == "4")
-            {
-
-            }
-
-            else if (choice == "5")
-            {
-                DisplayOrderDetailsOfCustomer();
-            }
-
-            else if (choice == "6")
-            {
-
-            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
         }
     }
 
@@ -89,15 +96,19 @@ class Program
                 customersList.Add(new Customer(name, id, dob));
                 for(int i = 0;i<customersList.Count;i++)
                 {
-                    customersList[i].Rewards.Tier=tier;
-                    customersList[i].Rewards.Points=point;
-                    customersList[i].Rewards.PunchCard=punchCard;
+                    if (customersList[i].MemberId == id)
+                    {
+                        customersList[i].Rewards.Tier = tier;
+                        customersList[i].Rewards.Points = point;
+                        customersList[i].Rewards.PunchCard = punchCard;
+                    }
                 }
             }
 
             foreach (Customer customer in customersList)
             {
-                Console.WriteLine(customer);
+                Console.WriteLine("name");
+                Console.WriteLine($"{customer.Name} {customer.MemberId} {customer.Dob} {customer.Rewards}");
             }
         }
     }
@@ -137,8 +148,17 @@ class Program
 
                     List<Flavour> fList = new List<Flavour>();
                     List<Topping> tList = new List<Topping>();
-                    if(f1 == "Durian" || f1== "Ube"|| f1== "Sea salt")
-                    fList.Add(new Flavour(f1, true, 1));
+                    switch (f1)
+                    {
+                        case "Durian":
+                            break;
+                        case "Ube":
+                            break;
+
+                        case "Sea salt":
+                            break;
+                    }
+                    
                     tList.Add(new Topping(t1));
                     tList.Add(new Topping(t2));
                     tList.Add(new Topping(t3));
@@ -203,6 +223,9 @@ class Program
         {
             Listallcustomers();
             Console.WriteLine("Select a customer: ");
+            string select = Console.ReadLine();
+            // if (select ==co.)
+
             // Additional logic for retrieving and displaying order details
         }
     

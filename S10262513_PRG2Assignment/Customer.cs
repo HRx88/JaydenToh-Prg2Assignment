@@ -67,6 +67,8 @@ namespace S10262513_PRG2Assignment
 
         public override string ToString()
         {
+            //Console.WriteLine("Name: \tMemberId:\tDOB: \tCurrentOrder: \tRewards: ");
+
             return "Name: "+Name+"\tMemberId: "+MemberId+"\tDOB: "+Dob.ToString("dd/MM/yyyy")+ "\tCurrentOrder: "+CurrentOrder+ "\tRewards: "+Rewards;
         }
     }
