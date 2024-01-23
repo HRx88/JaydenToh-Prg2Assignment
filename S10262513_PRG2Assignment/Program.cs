@@ -5,6 +5,8 @@ using static System.Formats.Asn1.AsnWriter;
 using System.IO;
 using System.Collections;
 using System;
+using System.Xml.Serialization;
+using Microsoft.VisualBasic.FileIO;
 //==========================================================
 // Student Number : S10262513
 // Student Name : Tan Hong Rong
@@ -64,7 +66,7 @@ class Program
                 }
                 else if (choice == "6")
                 {
-
+                    Modifyorderdetails();
                 }
             }
         }
@@ -238,5 +240,110 @@ class Program
 
             
    }
-    
+   // 6) Modifyorderdetails
+    static void Modifyorderdetails()
+    {
+        try
+        {
+            Listallcustomers();
+            Console.WriteLine("en");
+            int memid = Convert.ToInt32(Console.ReadLine());
+            for (int i = 0; i < tempList.Count; i++)
+            {
+                if (memid == tempList[i].MemberId)
+                {
+                    Console.WriteLine($"{ tempList[i].CurrentOrder.IceCreamList}");
+                    Console.WriteLine("[1]choose an existing ice cream object to modify");
+                    Console.WriteLine("[2] add an entirely new ice cream object to the order");
+                    Console.WriteLine("[3] choose an existing ice cream object to delete from the order");
+                    try
+                    {
+                        string choice = Console.ReadLine();
+                        if (choice == "1")
+                        {
+                            Console.WriteLine("which ice cream to modify");
+                            int id = Convert.ToInt32(Console.ReadLine());
+                            Console.WriteLine("Option :");
+                            string Option= Console.ReadLine();
+                            Console.WriteLine("scoops: ");
+                            int scoops = Convert.ToInt32(Console.ReadLine());
+                            if (scoops > 3)
+                            {
+                                Console.WriteLine("Scoops cannot be more than 3.");
+                                return;
+                            }
+                            Console.WriteLine("Flavours: ");
+                            string flavours = Console.ReadLine();
+                            Console.WriteLine("Toppings: ");
+                            string toppings = Console.ReadLine();
+
+                            if(Option == "Cone" || Option == "cone")
+                            {
+                                Console.WriteLine("dipped cone: ");
+                                string dipped = Console.ReadLine();
+                            }
+                            else if(Option=="Waffle"|| Option == "waffle")
+                            {
+                                Console.WriteLine("waffle flavour: ");
+                                string wflavour= Console.ReadLine();
+                            }
+
+                            tempList[i].CurrentOrder.IceCreamList[id].Option = Option;
+                            tempList[i].CurrentOrder.IceCreamList[id].Scoops = scoops;
+                            //tempList[i].CurrentOrder.IceCreamList[id].Flavours=flavours;
+                            //tempList[i].CurrentOrder.IceCreamList[id].Toppings=toppings;
+
+                        }
+                        else if (choice == "2")
+                        {
+
+                        }
+                        else if (choice == "3")
+                        {
+                            if (tempList[i].CurrentOrder.IceCreamList.Count != 0)
+                            {
+                                Console.WriteLine("which ice cream to delete");
+                                int id = Convert.ToInt32(Console.ReadLine());
+                                tempList[i].CurrentOrder.DeleteIceCream(id);
+                            }
+                            else
+                            {
+                                Console.WriteLine("cannot have zero ice creams in an order");
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+
+
+                }
+            }
+
+        }
+        catch(Exception e) 
+        {
+            Console.WriteLine(e.Message);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
