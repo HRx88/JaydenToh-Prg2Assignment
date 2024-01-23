@@ -60,7 +60,7 @@ class Program
 
             else if (choice == "5")
             {
-
+                DisplayOrderDetailsOfCustomer();
             }
 
             else if (choice == "6")
@@ -83,7 +83,16 @@ class Program
                 string name = data[0];
                 int id = Convert.ToInt32(data[1]);
                 DateTime dob = Convert.ToDateTime(data[2]);
+                string tier = data[3];
+                int point = Convert.ToInt32(data[4]);
+                int punchCard= Convert.ToInt32(data[5]);
                 customersList.Add(new Customer(name, id, dob));
+                for(int i = 0;i<customersList.Count;i++)
+                {
+                    customersList[i].Rewards.Tier=tier;
+                    customersList[i].Rewards.Points=point;
+                    customersList[i].Rewards.PunchCard=punchCard;
+                }
             }
 
             foreach (Customer customer in customersList)
@@ -96,27 +105,8 @@ class Program
     // 2) List all current orders
     // Display the information of all current orders in both the gold members and regular queue
     static List<Customer> co = customersList.ToList();
-    static List<Flavour>flavoursList=new List<Flavour>();
     static void DisplayOrders()
     {
-        using(StreamReader sr = new StreamReader("flavours.csv")) 
-        {
-            string? s=sr.ReadLine();
-            while((s = sr.ReadLine()) != null)
-            {
-                string[] data=s.Split(",");
-                string type = data[0];
-                int cost = Convert.ToInt32(data[1]);
-                if (cost == 2)
-                {
-                    flavoursList.Add(new Flavour(type,true,1));
-                }
-                else
-                {
-                    flavoursList.Add(new Flavour(type,false,1));
-                }
-            }
-        }
         using (StreamReader sr = new StreamReader("orders.csv"))
         {
             string? s = sr.ReadLine(); // Read the heading and discard
@@ -147,7 +137,7 @@ class Program
 
                     List<Flavour> fList = new List<Flavour>();
                     List<Topping> tList = new List<Topping>();
-                    
+                    if(f1 == "Durian" || f1== "Ube"|| f1== "Sea salt")
                     fList.Add(new Flavour(f1, true, 1));
                     tList.Add(new Topping(t1));
                     tList.Add(new Topping(t2));
