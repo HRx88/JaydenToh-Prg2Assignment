@@ -76,23 +76,23 @@ class Program
     {
         using (StreamReader sr = new StreamReader("customers.csv"))
         {
-            string? s = sr.ReadLine(); // Read the heading and discard
+           string? s = sr.ReadLine(); // Read the heading and discard
             while ((s = sr.ReadLine()) != null)
             {
                 string[] data = s.Split(',');
                 string name = data[0];
-                int id = Convert.ToInt32(data[1]);
+                int memberId = Convert.ToInt32(data[1]);
                 DateTime dob = Convert.ToDateTime(data[2]);
-                string tier = data[3];
-                int point = Convert.ToInt32(data[4]);
-                int punchCard= Convert.ToInt32(data[5]);
-                customersList.Add(new Customer(name, id, dob));
-                for(int i = 0;i<customersList.Count;i++)
-                {
-                    customersList[i].Rewards.Tier=tier;
-                    customersList[i].Rewards.Points=point;
-                    customersList[i].Rewards.PunchCard=punchCard;
-                }
+                string membershipStatus = data[3];
+                int membershipPoints = Convert.ToInt32(data[4]);
+                int punchCard = Convert.ToInt32(data[5]);
+
+                Customer customer = new Customer(name, memberId, dob);
+                customer.Rewards.Tier = membershipStatus;
+                customer.Rewards.Points = membershipPoints;
+                customer.Rewards.PunchCard = punchCard;
+
+                customersList.Add(customer);
             }
 
             foreach (Customer customer in customersList)
@@ -101,7 +101,6 @@ class Program
             }
         }
     }
-
     // 2) List all current orders
     // Display the information of all current orders in both the gold members and regular queue
     static List<Customer> co = customersList.ToList();
@@ -205,5 +204,4 @@ class Program
             Console.WriteLine("Select a customer: ");
             // Additional logic for retrieving and displaying order details
         }
-    
 }
