@@ -296,7 +296,7 @@ class Program
                         }
                         else if (choice == "2")
                         {
-
+                            Console.WriteLine();
                         }
                         else if (choice == "3")
                         {
