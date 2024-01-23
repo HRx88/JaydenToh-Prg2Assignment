@@ -14,6 +14,7 @@ class Program
 {
     static List<Customer> customersList = new List<Customer>();
     static Queue<Customer> orders = new Queue<Customer>();
+
     static void DisplayMenu()
     {
         // Your menu logic goes here
@@ -44,12 +45,12 @@ class Program
 
             else if (choice == "2")
             {
-
+                DisplayOrders();
             }
 
             else if (choice == "3")
             {
-
+                
             }
 
             else if (choice == "4")
@@ -94,8 +95,28 @@ class Program
 
     // 2) List all current orders
     // Display the information of all current orders in both the gold members and regular queue
+    static List<Customer> co = customersList.ToList();
+    static List<Flavour>flavoursList=new List<Flavour>();
     static void DisplayOrders()
     {
+        using(StreamReader sr = new StreamReader("flavours.csv")) 
+        {
+            string? s=sr.ReadLine();
+            while((s = sr.ReadLine()) != null)
+            {
+                string[] data=s.Split(",");
+                string type = data[0];
+                int cost = Convert.ToInt32(data[1]);
+                if (cost == 2)
+                {
+                    flavoursList.Add(new Flavour(type,true,1));
+                }
+                else
+                {
+                    flavoursList.Add(new Flavour(type,false,1));
+                }
+            }
+        }
         using (StreamReader sr = new StreamReader("orders.csv"))
         {
             string? s = sr.ReadLine(); // Read the heading and discard
@@ -108,27 +129,91 @@ class Program
                 DateTime tf = Convert.ToDateTime(data[3]);
                 string option = data[4];
                 int scoop = Convert.ToInt32(data[5]);
-                bool dipped = Convert.ToBoolean(data[6]);
-                string waffleflavour = data[7];
-                string f1 = data[8];
-                string f2 = data[9];
-                string f3 = data[10];
-                string t1 = data[11];
-                string t2 = data[12];
-                string t3 = data[13];
-                string t4 = data[14];
+                if (data[6] == null && data[7] == null && data[8] == null && data[10] == null && data[11] == null && data[12] == null && data[13] == null && data[14] == null)
+                {
+                    continue;
+                }
+                else
+                {
+                    bool dipped = Convert.ToBoolean(data[6]);
+                    string waffleflavour = data[7];
+                    string f1 = data[8];
+                    string f2 = data[9];
+                    string f3 = data[10];
+                    string t1 = data[11];
+                    string t2 = data[12];
+                    string t3 = data[13];
+                    string t4 = data[14];
 
-                // Process order data as needed
+                    List<Flavour> fList = new List<Flavour>();
+                    List<Topping> tList = new List<Topping>();
+                    
+                    fList.Add(new Flavour(f1, true, 1));
+                    tList.Add(new Topping(t1));
+                    tList.Add(new Topping(t2));
+                    tList.Add(new Topping(t3));
+                    tList.Add(new Topping(t4));
+                    IceCream iceCream;
+
+                    if (option == "cup")
+                    {
+                        iceCream = new Cup(option, scoop, fList, tList);
+                        for (int i = 0; i < co.Count; i++)
+                        {
+                            if (co[i].MemberId == memid)
+                            {
+                                co[i].MakeOrder();
+                                co[i].CurrentOrder.Id = id;
+                                co[i].CurrentOrder.TimeReceived = tr;
+                                co[i].CurrentOrder.TimeFulfilled = tf;
+                                 co[i].CurrentOrder.AddIceCream(iceCream);
+                            }
+                        }
+                    }
+                    else if (option == "cone")
+                    {
+                        iceCream = new Cone(option, scoop, fList, tList, dipped);
+                        for (int i = 0; i < co.Count; i++)
+                        {
+                            if (co[i].MemberId == memid)
+                            {
+                                co[i].MakeOrder();
+                                co[i].CurrentOrder.Id = id;
+                                co[i].CurrentOrder.TimeReceived = tr;
+                                co[i].CurrentOrder.TimeFulfilled = tf;
+                                 co[i].CurrentOrder.AddIceCream(iceCream);
+                            }
+                        }
+                    }
+                    else if (option == "waffle")
+                    {
+                        iceCream = new Waffle(option, scoop, fList, tList, waffleflavour);
+                        for (int i = 0; i < co.Count; i++)
+                        {
+                            if (co[i].MemberId == memid)
+                            {
+                                co[i].MakeOrder();
+                                co[i].CurrentOrder.Id = id;
+                                co[i].CurrentOrder.TimeReceived = tr;
+                                co[i].CurrentOrder.TimeFulfilled = tf;
+                                 co[i].CurrentOrder.AddIceCream(iceCream);
+                            }
+                        }
+                    }
+                    
+                }
+               
+               
             }
         }
     }
-
-    // 5) Display order details of a customer
-    // List the customers, prompt the user to select a customer, and retrieve order details
-    static void DisplayOrderDetailsOfCustomer()
-    {
-        Listallcustomers();
-        Console.WriteLine("Select a customer: ");
-        // Additional logic for retrieving and displaying order details
-    }
+        // 5) Display order details of a customer
+        // List the customers, prompt the user to select a customer, and retrieve order details
+        static void DisplayOrderDetailsOfCustomer()
+        {
+            Listallcustomers();
+            Console.WriteLine("Select a customer: ");
+            // Additional logic for retrieving and displaying order details
+        }
+    
 }
