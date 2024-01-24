@@ -5,6 +5,8 @@ using static System.Formats.Asn1.AsnWriter;
 using System.IO;
 using System.Collections;
 using System;
+using System.Drawing;
+using System.Xml.Linq;
 //==========================================================
 // Student Number : S10262513
 // Student Name : Tan Hong Rong
@@ -23,7 +25,7 @@ class Program
         Console.WriteLine("[1] List All Customers");
         Console.WriteLine("[2] Register a New Customer");
         Console.WriteLine("[3] Create a Customer's Order");
-        Console.WriteLine("[4]Display Order Details of a Customer");
+        Console.WriteLine("[4] Display Order Details of a Customer");
         Console.WriteLine("[5] Modify Order Details");
         Console.WriteLine("[0] Exit");
         Console.WriteLine("--------------------------------------");
@@ -56,13 +58,9 @@ class Program
                 }
                 else if (choice == "4")
                 {
-
-                }
-                else if (choice == "5")
-                {
                     DisplayOrderDetailsOfCustomer();
                 }
-                else if (choice == "6")
+                else if (choice == "5")
                 {
 
                 }
@@ -79,7 +77,7 @@ class Program
     {
         using (StreamReader sr = new StreamReader("customers.csv"))
         {
-           string? s = sr.ReadLine(); // Read the heading and discard
+            string? s = sr.ReadLine(); // Read the heading and discard
             while ((s = sr.ReadLine()) != null)
             {
                 string[] data = s.Split(',');
@@ -88,22 +86,21 @@ class Program
                 DateTime dob = Convert.ToDateTime(data[2]);
                 string tier = data[3];
                 int point = Convert.ToInt32(data[4]);
-                int punchCard= Convert.ToInt32(data[5]);
-                customersList.Add(new Customer(name, id, dob));
-                for(int i = 0;i<customersList.Count;i++)
+                int punchCard = Convert.ToInt32(data[5]);
+
+
+                for (int i = 0; i < customersList.Count; i++)
                 {
-                    if (customersList[i].MemberId == id)
+                    if (customersList[i].MemberId == memberId)
                     {
                         customersList[i].Rewards.Tier = tier;
                         customersList[i].Rewards.Points = point;
                         customersList[i].Rewards.PunchCard = punchCard;
                     }
                 }
-            }
-            
+
                 string membershipStatus = data[3];
                 int membershipPoints = Convert.ToInt32(data[4]);
-                int punchCard = Convert.ToInt32(data[5]);
 
                 Customer customer = new Customer(name, memberId, dob);
                 customer.Rewards.Tier = membershipStatus;
@@ -113,12 +110,15 @@ class Program
                 customersList.Add(customer);
             }
 
+            Console.WriteLine($"{"Name",-10} {"MemberID",-10} {"DOB",-10} {"MemberStatus",-15} {"Points",-10} {"PunchCard",-10}");
             foreach (Customer customer in customersList)
             {
-                Console.WriteLine($"{customer.Name} {customer.MemberId} {customer.Dob} {customer.Rewards}");
+                Console.WriteLine($"{customer.Name,-10} {customer.MemberId,-10} {customer.Dob.ToString("dd/MM/yyyy"),-10} {customer.Rewards.Tier,-15} {customer.Rewards.Points,-10} {customer.Rewards.PunchCard,-10}");
             }
+
         }
     }
+
     // 2) List all current orders
     // Display the information of all current orders in both the gold members and regular queue
     static List<Customer> tempList = customersList.ToList();
@@ -136,6 +136,7 @@ class Program
                 DateTime tf = Convert.ToDateTime(data[3]);
                 string option = data[4];
                 int scoop = Convert.ToInt32(data[5]);
+
                 if (data[6] == null && data[7] == null && data[8] == null && data[10] == null && data[11] == null && data[12] == null && data[13] == null && data[14] == null)
                 {
                     continue;
@@ -164,7 +165,7 @@ class Program
                         case "Sea salt":
                             break;
                     }
-                    
+
                     tList.Add(new Topping(t1));
                     tList.Add(new Topping(t2));
                     tList.Add(new Topping(t3));
@@ -174,7 +175,7 @@ class Program
                     if (option == "cup")
                     {
                         iceCream = new Cup(option, scoop, fList, tList);
-                        for (int i = 0; i <tempList.Count; i++)
+                        for (int i = 0; i < tempList.Count; i++)
                         {
                             if (tempList[i].MemberId == memid)
                             {
@@ -182,7 +183,7 @@ class Program
                                 tempList[i].CurrentOrder.Id = id;
                                 tempList[i].CurrentOrder.TimeReceived = tr;
                                 tempList[i].CurrentOrder.TimeFulfilled = tf;
-                                 tempList[i].CurrentOrder.AddIceCream(iceCream);
+                                tempList[i].CurrentOrder.AddIceCream(iceCream);
                             }
                         }
                     }
@@ -197,7 +198,7 @@ class Program
                                 tempList[i].CurrentOrder.Id = id;
                                 tempList[i].CurrentOrder.TimeReceived = tr;
                                 tempList[i].CurrentOrder.TimeFulfilled = tf;
-                                 tempList[i].CurrentOrder.AddIceCream(iceCream);
+                                tempList[i].CurrentOrder.AddIceCream(iceCream);
                             }
                         }
                     }
@@ -212,50 +213,30 @@ class Program
                                 tempList[i].CurrentOrder.Id = id;
                                 tempList[i].CurrentOrder.TimeReceived = tr;
                                 tempList[i].CurrentOrder.TimeFulfilled = tf;
-                                 tempList[i].CurrentOrder.AddIceCream(iceCream);
+                                tempList[i].CurrentOrder.AddIceCream(iceCream);
                             }
                         }
                     }
-                    
                 }
-               
-               
             }
         }
     }
-// 5) Display order details of a customer
-//list the customers
-//prompt user to select a customer and retrieve the selected customer
-//retrieve all the order objects of the customer, past and current
-//for each order, display all the details of the order including datetime received, datetime
-//fulfilled(if applicable) and all ice cream details associated with the order
 
-   static void DisplayOrderDetailsOfCustomer()
-   {
-     Listallcustomers();
-     Console.WriteLine("Select a customer: ");
-     int memId =Convert.ToInt32(Console.ReadLine());
-      for (int i = 0;i<tempList.Count ; i++)
-      {
-            if (tempList[i].MemberId ==memId)
-            {
-
-                Console.WriteLine("Current order: ");
-                Console.WriteLine($"{tempList[i].CurrentOrder}");
-                Console.WriteLine("Order History: ");
-                Console.WriteLine(tempList[i].OrderHistory);
-            }
-      }
-
-            
-   }
-    
-        // 5) Display order details of a customer
-        // List the customers, prompt the user to select a customer, and retrieve order details
-        static void DisplayOrderDetailsOfCustomer()
+    // 5) Display order details of a customer
+    // List the customers, prompt the user to select a customer, and retrieve order details
+    static void DisplayOrderDetailsOfCustomer()
+    {
+        Listallcustomers();
+        Console.WriteLine("Select a customer: ");
+        int memId = Convert.ToInt32(Console.ReadLine());
+        for (int i = 0; i < tempList.Count; i++)
         {
-            Listallcustomers();
-            Console.WriteLine("Select a customer: ");
+            if (tempList[i].MemberId == memId)
+            {
+                Console.WriteLine("Current order: ");
+                Console.WriteLine("Select a customer: ");
             // Additional logic for retrieving and displaying order details
         }
+    }
+   }
 }
