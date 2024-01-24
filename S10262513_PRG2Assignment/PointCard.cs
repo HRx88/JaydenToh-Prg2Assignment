@@ -14,9 +14,11 @@ namespace S10262513_PRG2Assignment
     class PointCard
     {
 
-        public string Tier { get; set; }
         public int Points { get; set; }
+
         public int PunchCard { get; set; }
+
+        public string Tier { get; set; }
 
         public PointCard()
         {
@@ -74,7 +76,7 @@ namespace S10262513_PRG2Assignment
 
         public override string ToString()
         {
-            return "Tier: " + Tier + "\tPoints: " + Points + "\tPunchCard: " + PunchCard;
+            return "Points: "+Points+"\tPunchCard: "+PunchCard+"\tTier: "+Tier;
         }
 
     }

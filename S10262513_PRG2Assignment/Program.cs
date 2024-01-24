@@ -5,7 +5,8 @@ using static System.Formats.Asn1.AsnWriter;
 using System.IO;
 using System.Collections;
 using System;
-using System.Drawing;
+using System.Xml.Serialization;
+using Microsoft.VisualBasic.FileIO;
 using System.Xml.Linq;
 //==========================================================
 // Student Number : S10262513
@@ -62,7 +63,11 @@ class Program
                 }
                 else if (choice == "5")
                 {
-
+                    DisplayOrderDetailsOfCustomer();
+                }
+                else if (choice == "6")
+                {
+                    Modifyorderdetails();
                 }
             }
         }
@@ -82,39 +87,31 @@ class Program
             {
                 string[] data = s.Split(',');
                 string name = data[0];
-                int memberId = Convert.ToInt32(data[1]);
+                int id = Convert.ToInt32(data[1]);
                 DateTime dob = Convert.ToDateTime(data[2]);
                 string tier = data[3];
                 int point = Convert.ToInt32(data[4]);
                 int punchCard = Convert.ToInt32(data[5]);
 
-
+                customersList.Add(new Customer(name, id, dob));
                 for (int i = 0; i < customersList.Count; i++)
                 {
-                    if (customersList[i].MemberId == memberId)
+                    if (customersList[i].MemberId == id)
                     {
                         customersList[i].Rewards.Tier = tier;
                         customersList[i].Rewards.Points = point;
                         customersList[i].Rewards.PunchCard = punchCard;
                     }
                 }
-
-                string membershipStatus = data[3];
-                int membershipPoints = Convert.ToInt32(data[4]);
-
-                Customer customer = new Customer(name, memberId, dob);
-                customer.Rewards.Tier = membershipStatus;
-                customer.Rewards.Points = membershipPoints;
-                customer.Rewards.PunchCard = punchCard;
-
-                customersList.Add(customer);
             }
 
-            Console.WriteLine($"{"Name",-10} {"MemberID",-10} {"DOB",-10} {"MemberStatus",-15} {"Points",-10} {"PunchCard",-10}");
+
+            Console.WriteLine($"{"Name",-10} {"MemberID",-12} {"DOB",-13} {"MemberStatus",-15} {"Points",-10} {"PunchCard",-10}");
             foreach (Customer customer in customersList)
             {
-                Console.WriteLine($"{customer.Name,-10} {customer.MemberId,-10} {customer.Dob.ToString("dd/MM/yyyy"),-10} {customer.Rewards.Tier,-15} {customer.Rewards.Points,-10} {customer.Rewards.PunchCard,-10}");
+                Console.WriteLine($"{customer.Name,-10} {customer.MemberId,-12} {customer.Dob.ToString("dd/MM/yyyy"),-13} {customer.Rewards.Tier,-15} {customer.Rewards.Points,-10} {customer.Rewards.PunchCard,-10}");
             }
+
 
         }
     }
@@ -234,9 +231,118 @@ class Program
             if (tempList[i].MemberId == memId)
             {
                 Console.WriteLine("Current order: ");
-                Console.WriteLine("Select a customer: ");
-            // Additional logic for retrieving and displaying order details
+                Console.WriteLine($"{tempList[i].CurrentOrder}");
+                Console.WriteLine("Order History: ");
+                Console.WriteLine(tempList[i].OrderHistory);
+            }
+      }
+
+            
+   }
+   // 6) Modifyorderdetails
+    static void Modifyorderdetails()
+    {
+        try
+        {
+            Listallcustomers();
+            Console.WriteLine("en");
+            int memid = Convert.ToInt32(Console.ReadLine());
+            for (int i = 0; i < tempList.Count; i++)
+            {
+                if (memid == tempList[i].MemberId)
+                {
+                    Console.WriteLine($"{ tempList[i].CurrentOrder.IceCreamList}");
+                    Console.WriteLine("[1]choose an existing ice cream object to modify");
+                    Console.WriteLine("[2] add an entirely new ice cream object to the order");
+                    Console.WriteLine("[3] choose an existing ice cream object to delete from the order");
+                    try
+                    {
+                        string choice = Console.ReadLine();
+                        if (choice == "1")
+                        {
+                            Console.WriteLine("which ice cream to modify");
+                            int id = Convert.ToInt32(Console.ReadLine());
+                            Console.WriteLine("Option :");
+                            string Option= Console.ReadLine();
+                            Console.WriteLine("scoops: ");
+                            int scoops = Convert.ToInt32(Console.ReadLine());
+                            if (scoops > 3)
+                            {
+                                Console.WriteLine("Scoops cannot be more than 3.");
+                                return;
+                            }
+                            Console.WriteLine("Flavours: ");
+                            string flavours = Console.ReadLine();
+                            Console.WriteLine("Toppings: ");
+                            string toppings = Console.ReadLine();
+
+                            if(Option == "Cone" || Option == "cone")
+                            {
+                                Console.WriteLine("dipped cone: ");
+                                string dipped = Console.ReadLine();
+                            }
+                            else if(Option=="Waffle"|| Option == "waffle")
+                            {
+                                Console.WriteLine("waffle flavour: ");
+                                string wflavour= Console.ReadLine();
+                            }
+
+                            tempList[i].CurrentOrder.IceCreamList[id].Option = Option;
+                            tempList[i].CurrentOrder.IceCreamList[id].Scoops = scoops;
+                            //tempList[i].CurrentOrder.IceCreamList[id].Flavours=flavours;
+                            //tempList[i].CurrentOrder.IceCreamList[id].Toppings=toppings;
+
+                        }
+                        else if (choice == "2")
+                        {
+                            Console.WriteLine();
+                        }
+                        else if (choice == "3")
+                        {
+                            if (tempList[i].CurrentOrder.IceCreamList.Count != 0)
+                            {
+                                Console.WriteLine("which ice cream to delete");
+                                int id = Convert.ToInt32(Console.ReadLine());
+                                tempList[i].CurrentOrder.DeleteIceCream(id);
+                            }
+                            else
+                            {
+                                Console.WriteLine("cannot have zero ice creams in an order");
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+
+
+                }
+            }
+
+        }
+        catch(Exception e) 
+        {
+            Console.WriteLine(e.Message);
         }
     }
-   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
