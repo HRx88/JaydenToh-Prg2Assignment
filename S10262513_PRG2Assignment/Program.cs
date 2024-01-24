@@ -21,7 +21,6 @@ class Program
     static List<Customer> tempList = customersList.ToList();
     static void DisplayMenu()
     {
-        // Your menu logic goes here
         Console.WriteLine("---------------- Menu -----------------");
         Console.WriteLine("[1] List All Customers");
         Console.WriteLine("[2] Register a New Customer");
@@ -47,27 +46,27 @@ class Program
                     break;
                 else if (choice == "1")
                 {
-                    Listallcustomers();
+                    ListAllCustomers(customersList);
                 }
                 else if (choice == "2")
                 {
-                    DisplayOrders();
+                    DisplayOrders(customersList);
                 }
                 else if (choice == "3")
                 {
-
+                    RegisterNewCustomer(customersList);
                 }
                 else if (choice == "4")
                 {
-                    DisplayOrderDetailsOfCustomer();
+                    CreateCustomerOrder(customersList);
                 }
                 else if (choice == "5")
                 {
-                    DisplayOrderDetailsOfCustomer();
+                    DisplayOrderDetailsOfCustomer(customersList);
                 }
                 else if (choice == "6")
                 {
-                    Modifyorderdetails();
+                    ModifyOrderDetails(customersList);
                 }
             }
         }
@@ -77,13 +76,11 @@ class Program
         }
     }
 
-    // 1) Display order details of a customer
-    // 1) Display order details of a customer
-    static void Listallcustomers()
+    // option 1
+    // Display order details of a customer
+    static void ListAllCustomers(List<Customer> c)
     {
-        // Clear the customersList before adding customers
-        customersList.Clear();
-
+        c.Clear();
         using (StreamReader sr = new StreamReader("customers.csv"))
         {
             string? s = sr.ReadLine(); // Read the heading and discard
@@ -97,34 +94,35 @@ class Program
                 int point = Convert.ToInt32(data[4]);
                 int punchCard = Convert.ToInt32(data[5]);
 
-                customersList.Add(new Customer(name, id, dob));
-                for (int i = 0; i < customersList.Count; i++)
+                c.Add(new Customer(name, id, dob));
+                for (int i = 0; i < c.Count; i++)
                 {
-                    if (customersList[i].MemberId == id)
+                    if (c[i].MemberId == id)
                     {
-                        customersList[i].Rewards.Tier = tier;
-                        customersList[i].Rewards.Points = point;
-                        customersList[i].Rewards.PunchCard = punchCard;
+                        c[i].Rewards.Tier = tier;
+                        c[i].Rewards.Points = point;
+                        c[i].Rewards.PunchCard = punchCard;
+                        break;
                     }
                 }
             }
 
             Console.WriteLine($"{"Name",-10} {"MemberID",-12} {"DOB",-13} {"MemberStatus",-15} {"Points",-10} {"PunchCard",-10}");
-            foreach (Customer customer in customersList)
+            foreach (Customer customer in c)
             {
                 Console.WriteLine($"{customer.Name,-10} {customer.MemberId,-12} {customer.Dob.ToString("dd/MM/yyyy"),-13} {customer.Rewards.Tier,-15} {customer.Rewards.Points,-10} {customer.Rewards.PunchCard,-10}");
             }
         }
     }
 
-
-    // 2) List all current orders
+    // Option 2
+    // List all current orders
     // Display the information of all current orders in both the gold members and regular queue
-    static void DisplayOrders()
+    static void DisplayOrders(List<Customer> c)
     {
         using (StreamReader sr = new StreamReader("orders.csv"))
         {
-            string? s = sr.ReadLine(); // Read the heading and discard
+            string? s = sr.ReadLine(); 
             while ((s = sr.ReadLine()) != null)
             {
                 string[] data = s.Split(',');
@@ -173,45 +171,45 @@ class Program
                     if (option == "cup")
                     {
                         iceCream = new Cup(option, scoop, fList, tList);
-                        for (int i = 0; i < tempList.Count; i++)
+                        for (int i = 0; i < c.Count; i++)
                         {
-                            if (tempList[i].MemberId == memid)
+                            if (c[i].MemberId == memid)
                             {
-                                tempList[i].MakeOrder();
-                                tempList[i].CurrentOrder.Id = id;
-                                tempList[i].CurrentOrder.TimeReceived = tr;
-                                tempList[i].CurrentOrder.TimeFulfilled = tf;
-                                tempList[i].CurrentOrder.AddIceCream(iceCream);
+                                c[i].MakeOrder();
+                                c[i].CurrentOrder.Id = id;
+                                c[i].CurrentOrder.TimeReceived = tr;
+                                c[i].CurrentOrder.TimeFulfilled = tf;
+                                c[i].CurrentOrder.AddIceCream(iceCream);
                             }
                         }
                     }
                     else if (option == "cone")
                     {
                         iceCream = new Cone(option, scoop, fList, tList, dipped);
-                        for (int i = 0; i < tempList.Count; i++)
+                        for (int i = 0; i < c.Count; i++)
                         {
-                            if (tempList[i].MemberId == memid)
+                            if (c[i].MemberId == memid)
                             {
-                                tempList[i].MakeOrder();
-                                tempList[i].CurrentOrder.Id = id;
-                                tempList[i].CurrentOrder.TimeReceived = tr;
-                                tempList[i].CurrentOrder.TimeFulfilled = tf;
-                                tempList[i].CurrentOrder.AddIceCream(iceCream);
+                                c[i].MakeOrder();
+                                c[i].CurrentOrder.Id = id;
+                                c[i].CurrentOrder.TimeReceived = tr;
+                                c[i].CurrentOrder.TimeFulfilled = tf;
+                                c[i].CurrentOrder.AddIceCream(iceCream);
                             }
                         }
                     }
                     else if (option == "waffle")
                     {
                         iceCream = new Waffle(option, scoop, fList, tList, waffleflavour);
-                        for (int i = 0; i < tempList.Count; i++)
+                        for (int i = 0; i < c.Count; i++)
                         {
-                            if (tempList[i].MemberId == memid)
+                            if (c[i].MemberId == memid)
                             {
-                                tempList[i].MakeOrder();
-                                tempList[i].CurrentOrder.Id = id;
-                                tempList[i].CurrentOrder.TimeReceived = tr;
-                                tempList[i].CurrentOrder.TimeFulfilled = tf;
-                                tempList[i].CurrentOrder.AddIceCream(iceCream);
+                                c[i].MakeOrder();
+                                c[i].CurrentOrder.Id = id;
+                                c[i].CurrentOrder.TimeReceived = tr;
+                                c[i].CurrentOrder.TimeFulfilled = tf;
+                                c[i].CurrentOrder.AddIceCream(iceCream);
                             }
                         }
                     }
@@ -220,43 +218,89 @@ class Program
         }
     }
 
-    // 5) Display order details of a customer
-    // List the customers, prompt the user to select a customer, and retrieve order details
-    static void DisplayOrderDetailsOfCustomer()
+    // Option 3
+    static void RegisterNewCustomer(List<Customer> c)
     {
-        Listallcustomers();
 
-        Console.WriteLine("Select a customer: ");
-        int memId = Convert.ToInt32(Console.ReadLine());
-
-        // Find the customer with the specified MemberId
-        Customer selectedCustomer = customersList.FirstOrDefault(customer => customer.MemberId == memId);
-
-        if (selectedCustomer != null)
-        {
-            Console.WriteLine("Current order: ");
-            Console.WriteLine($"{selectedCustomer.CurrentOrder}");
-
-            Console.WriteLine("Order History: ");
-            foreach (var order in selectedCustomer.OrderHistory)
-            {
-                Console.WriteLine(order); // Assuming Order has a meaningful ToString() implementation
-            }
-        }
     }
-   // 6) Modifyorderdetails
-    static void Modifyorderdetails()
+
+    // Option 4
+    static void CreateCustomerOrder(List<Customer> c)
+    {
+
+    }
+
+    // Option 5
+    // Display order details of a customer
+    // List the customers, prompt the user to select a customer, and retrieve order details
+    static void DisplayOrderDetailsOfCustomer(List<Customer> c)
     {
         try
         {
-            Listallcustomers();
+            Console.WriteLine($"{"Name",-10} {"MemberID",-12} {"DOB",-13} {"MemberStatus",-15} {"Points",-10} {"PunchCard",-10}");
+            foreach (Customer customer in c)
+            {
+                Console.WriteLine($"{customer.Name,-10} {customer.MemberId,-12} {customer.Dob.ToString("dd/MM/yyyy"),-13} {customer.Rewards.Tier,-15} {customer.Rewards.Points,-10} {customer.Rewards.PunchCard,-10}");
+            }
+            Console.WriteLine("Select a customer by MemberId: ");
+            int memId = Convert.ToInt32(Console.ReadLine());
+            bool flag=false;
+            for (int i = 0; i < c.Count; i++)
+            {
+                if (c[i].MemberId == memId)
+                {
+                    flag = true;
+                    Console.WriteLine("Current order: ");
+                    //foreach (Order o in c[i].CurrentOrder)
+                    //{
+                    //    Console.WriteLine($"{o}");
+                    //    foreach (IceCream ice in o.IceCreamList)
+                    //    {
+                    //        Console.WriteLine(ice);
+                    //    }
+                    //}
+                    Console.WriteLine("Order History: ");
+                    foreach (Order o in c[i].OrderHistory)
+                    {
+                        Console.WriteLine($"{o}");
+                        foreach (IceCream ice in o.IceCreamList)
+                        {
+                            Console.WriteLine(ice);
+                        }
+                    }
+
+                }
+            }
+            if (flag == false)
+            {
+                Console.WriteLine("not found");
+             
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }   
+    }
+   // Option 6
+   // Modify order details
+    static void ModifyOrderDetails(List<Customer> c)
+    {
+        try
+        {
+            Console.WriteLine($"{"Name",-10} {"MemberID",-12} {"DOB",-13} {"MemberStatus",-15} {"Points",-10} {"PunchCard",-10}");
+            foreach (Customer customer in c)
+            {
+                Console.WriteLine($"{customer.Name,-10} {customer.MemberId,-12} {customer.Dob.ToString("dd/MM/yyyy"),-13} {customer.Rewards.Tier,-15} {customer.Rewards.Points,-10} {customer.Rewards.PunchCard,-10}");
+            }
+
             Console.WriteLine("en");
             int memid = Convert.ToInt32(Console.ReadLine());
-            for (int i = 0; i < tempList.Count; i++)
+            for (int i = 0; i < c.Count; i++)
             {
-                if (memid == tempList[i].MemberId)
+                if (memid == c[i].MemberId)
                 {
-                    Console.WriteLine($"{ tempList[i].CurrentOrder.IceCreamList}");
+                    Console.WriteLine($"{ c[i].CurrentOrder.IceCreamList}");
                     Console.WriteLine("[1]choose an existing ice cream object to modify");
                     Console.WriteLine("[2] add an entirely new ice cream object to the order");
                     Console.WriteLine("[3] choose an existing ice cream object to delete from the order");
@@ -292,8 +336,8 @@ class Program
                                 string wflavour= Console.ReadLine();
                             }
 
-                            tempList[i].CurrentOrder.IceCreamList[id].Option = Option;
-                            tempList[i].CurrentOrder.IceCreamList[id].Scoops = scoops;
+                            c[i].CurrentOrder.IceCreamList[id].Option = Option;
+                            c[i].CurrentOrder.IceCreamList[id].Scoops = scoops;
                             //tempList[i].CurrentOrder.IceCreamList[id].Flavours=flavours;
                             //tempList[i].CurrentOrder.IceCreamList[id].Toppings=toppings;
 
@@ -304,11 +348,11 @@ class Program
                         }
                         else if (choice == "3")
                         {
-                            if (tempList[i].CurrentOrder.IceCreamList.Count != 0)
+                            if (c[i].CurrentOrder.IceCreamList.Count != 0)
                             {
                                 Console.WriteLine("which ice cream to delete");
                                 int id = Convert.ToInt32(Console.ReadLine());
-                                tempList[i].CurrentOrder.DeleteIceCream(id);
+                                c[i].CurrentOrder.DeleteIceCream(id);
                             }
                             else
                             {
@@ -320,8 +364,6 @@ class Program
                     {
                         Console.WriteLine(e.Message);
                     }
-
-
                 }
             }
 
