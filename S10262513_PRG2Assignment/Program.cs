@@ -105,7 +105,7 @@ class Program
             
             foreach (Customer customer in customersList)
             {
-                Console.WriteLine($"{customer.Name} {customer.MemberId} {customer.Dob} {customer.Rewards}");
+                Console.WriteLine($"{customer.Name} {customer.MemberId} {customer.Dob.ToString("dd/MM/yyyy")} {customer.Rewards.Tier} {customer.Rewards.Points} {customer.Rewards.PunchCard}");
             }
         }
     }
