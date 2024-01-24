@@ -18,7 +18,7 @@ class Program
 {
     static List<Customer> customersList = new List<Customer>();
     static Queue<Customer> orders = new Queue<Customer>();
-
+    static List<Customer> tempList = customersList.ToList();
     static void DisplayMenu()
     {
         // Your menu logic goes here
@@ -80,7 +80,6 @@ class Program
     // 1) Display order details of a customer
     static void Listallcustomers(List<Customer>c)
     {
-        c.Clear();
         using (StreamReader sr = new StreamReader("customers.csv"))
         {
             string? s = sr.ReadLine(); // Read the heading and discard
@@ -107,21 +106,19 @@ class Program
                 }
             }
 
-
             Console.WriteLine($"{"Name",-10} {"MemberID",-12} {"DOB",-13} {"MemberStatus",-15} {"Points",-10} {"PunchCard",-10}");
             foreach (Customer customer in c)
             {
                 Console.WriteLine($"{customer.Name,-10} {customer.MemberId,-12} {customer.Dob.ToString("dd/MM/yyyy"),-13} {customer.Rewards.Tier,-15} {customer.Rewards.Points,-10} {customer.Rewards.PunchCard,-10}");
             }
-
-
         }
     }
 
+
     // 2) List all current orders
     // Display the information of all current orders in both the gold members and regular queue
-    
-    static void DisplayOrders(List<Customer>c)
+    static List<Customer> tempList = customersList.ToList();
+    static void DisplayOrders()
     {
         using (StreamReader sr = new StreamReader("orders.csv"))
         {
@@ -256,7 +253,7 @@ class Program
                 }
                 
             }
-        }
+      }
 
             
     }
@@ -352,23 +349,4 @@ class Program
             Console.WriteLine(e.Message);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
