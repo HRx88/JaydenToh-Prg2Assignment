@@ -80,6 +80,7 @@ class Program
     // 1) Display order details of a customer
     static void Listallcustomers(List<Customer>c)
     {
+        c.Clear();
         using (StreamReader sr = new StreamReader("customers.csv"))
         {
             string? s = sr.ReadLine(); // Read the heading and discard
@@ -221,39 +222,52 @@ class Program
     // List the customers, prompt the user to select a customer, and retrieve order details
     static void DisplayOrderDetailsOfCustomer(List<Customer>c)
     {
-        Console.WriteLine($"{"Name",-10} {"MemberID",-12} {"DOB",-13} {"MemberStatus",-15} {"Points",-10} {"PunchCard",-10}");
-        foreach (Customer customer in c)
+        try
         {
-            Console.WriteLine($"{customer.Name,-10} {customer.MemberId,-12} {customer.Dob.ToString("dd/MM/yyyy"),-13} {customer.Rewards.Tier,-15} {customer.Rewards.Points,-10} {customer.Rewards.PunchCard,-10}");
-        }
-        Console.WriteLine("Select a customer: ");
-        int memId = Convert.ToInt32(Console.ReadLine());
-        for (int i = 0; i < c.Count; i++)
-        {
-            if (c[i].MemberId == memId)
+            Console.WriteLine($"{"Name",-10} {"MemberID",-12} {"DOB",-13} {"MemberStatus",-15} {"Points",-10} {"PunchCard",-10}");
+            foreach (Customer customer in c)
             {
-                Console.WriteLine("Current order: ");
-                //foreach (Order o in c[i].CurrentOrder)
-                //{
-                //    Console.WriteLine($"{o}");
-                //    foreach (IceCream ice in o.IceCreamList)
-                //    {
-                //        Console.WriteLine(ice);
-                //    }
-                //}
-                Console.WriteLine("Order History: ");
-                foreach(Order o in c[i].OrderHistory)
-                {
-                    Console.WriteLine($"{o}");
-                    foreach(IceCream ice in o.IceCreamList)
-                    {
-                        Console.WriteLine(ice);
-                    }
-                }
-                
+                Console.WriteLine($"{customer.Name,-10} {customer.MemberId,-12} {customer.Dob.ToString("dd/MM/yyyy"),-13} {customer.Rewards.Tier,-15} {customer.Rewards.Points,-10} {customer.Rewards.PunchCard,-10}");
             }
-      }
+            Console.WriteLine("Select a customer by MemberId: ");
+            int memId = Convert.ToInt32(Console.ReadLine());
+            bool flag=false;
+            for (int i = 0; i < c.Count; i++)
+            {
+                if (c[i].MemberId == memId)
+                {
+                    flag = true;
+                    Console.WriteLine("Current order: ");
+                    //foreach (Order o in c[i].CurrentOrder)
+                    //{
+                    //    Console.WriteLine($"{o}");
+                    //    foreach (IceCream ice in o.IceCreamList)
+                    //    {
+                    //        Console.WriteLine(ice);
+                    //    }
+                    //}
+                    Console.WriteLine("Order History: ");
+                    foreach (Order o in c[i].OrderHistory)
+                    {
+                        Console.WriteLine($"{o}");
+                        foreach (IceCream ice in o.IceCreamList)
+                        {
+                            Console.WriteLine(ice);
+                        }
+                    }
 
+                }
+            }
+            if (flag == false)
+            {
+                Console.WriteLine("not found");
+             
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
             
     }
    // 6) Modifyorderdetails
