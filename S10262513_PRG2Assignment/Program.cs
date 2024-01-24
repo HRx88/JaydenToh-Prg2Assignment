@@ -225,22 +225,25 @@ class Program
     static void DisplayOrderDetailsOfCustomer()
     {
         Listallcustomers();
+
         Console.WriteLine("Select a customer: ");
         int memId = Convert.ToInt32(Console.ReadLine());
-        for (int i = 0; i < tempList.Count; i++)
-        {
-            if (tempList[i].MemberId == memId)
-            {
-                Console.WriteLine("Current order: ");
-                Console.WriteLine($"{tempList[i].CurrentOrder}");
-                Console.WriteLine("Order History: ");
-                Console.WriteLine(tempList[i].OrderHistory);
-            }
-            break;
-      }
 
-            
-   }
+        // Find the customer with the specified MemberId
+        Customer selectedCustomer = customersList.FirstOrDefault(customer => customer.MemberId == memId);
+
+        if (selectedCustomer != null)
+        {
+            Console.WriteLine("Current order: ");
+            Console.WriteLine($"{selectedCustomer.CurrentOrder}");
+
+            Console.WriteLine("Order History: ");
+            foreach (var order in selectedCustomer.OrderHistory)
+            {
+                Console.WriteLine(order); // Assuming Order has a meaningful ToString() implementation
+            }
+        }
+    }
    // 6) Modifyorderdetails
     static void Modifyorderdetails()
     {
