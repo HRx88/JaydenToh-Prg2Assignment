@@ -117,8 +117,7 @@ class Program
 
     // 2) List all current orders
     // Display the information of all current orders in both the gold members and regular queue
-    static List<Customer> tempList = customersList.ToList();
-    static void DisplayOrders()
+    static void DisplayOrders(List<Customer>c)
     {
         using (StreamReader sr = new StreamReader("orders.csv"))
         {
