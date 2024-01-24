@@ -20,7 +20,7 @@ namespace S10262513_PRG2Assignment
             
         }
 
-        public Waffle(string o, int s, List<Flavour> f, List<Topping> t,string w):base(o, s, f, t) 
+        public Waffle(string o, int s, List<Flavour> f, List<Topping> t,string w=null):base(o, s, f, t) 
         {
             WaffleFlavour = w;
         }
