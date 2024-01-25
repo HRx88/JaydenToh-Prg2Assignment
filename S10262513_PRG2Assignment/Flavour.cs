@@ -23,7 +23,7 @@ namespace S10262513_PRG2Assignment
             
         }
 
-        public Flavour(string t,bool p,int q)
+        public Flavour(string t,bool p,int q=1)
         {
             Type = t;
             Premium = p;

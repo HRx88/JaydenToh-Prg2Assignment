@@ -40,6 +40,8 @@ namespace S10262513_PRG2Assignment
             Console.WriteLine("[1]choose an existing ice cream object to modify");
             Console.WriteLine("[2] add an entirely new ice cream object to the order");
             Console.WriteLine("[3] choose an existing ice cream object to delete from the order");
+            string q = Console.ReadLine();
+            Console.WriteLine(q);
 
         }
 
