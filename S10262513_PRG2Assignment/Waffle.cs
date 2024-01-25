@@ -20,7 +20,7 @@ namespace S10262513_PRG2Assignment
             
         }
 
-        public Waffle(string o, int s, List<Flavour> f, List<Topping> t,string w= "original") :base(o, s, f, t) 
+        public Waffle(string o, int s, List<Flavour> f, List<Topping> t,string w= "Original") :base(o, s, f, t) 
         {
             WaffleFlavour = w;
         }
@@ -40,7 +40,7 @@ namespace S10262513_PRG2Assignment
             switch (base.Scoops)
             {
                 case 2:
-                    if (WaffleFlavour != "original") // Check if a waffle flavor is selected
+                    if (WaffleFlavour != "Original") // Check if a waffle flavor is selected
                     {
                         price += 8.50+3;
                         return price;
@@ -51,7 +51,7 @@ namespace S10262513_PRG2Assignment
                         return price;
                     }
                 case 3:
-                    if (WaffleFlavour != "original") // Check if a waffle flavor is selected
+                    if (WaffleFlavour != "Original") // Check if a waffle flavor is selected
                     {
                         price += 9.50 + 3;
                         return price;
@@ -62,7 +62,7 @@ namespace S10262513_PRG2Assignment
                         return price;
                     }
                 default:
-                    if (WaffleFlavour != "original") // Check if a waffle flavor is selected
+                    if (WaffleFlavour != "Original") // Check if a waffle flavor is selected
                     {
                         price += 7.00 + 3;
                         return price;
