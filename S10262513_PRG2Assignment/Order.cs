@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,11 +38,12 @@ namespace S10262513_PRG2Assignment
         }
         public void ModifyIceCream(int id)
         {
+            
             Console.WriteLine("[1]choose an existing ice cream object to modify");
             Console.WriteLine("[2] add an entirely new ice cream object to the order");
             Console.WriteLine("[3] choose an existing ice cream object to delete from the order");
-            string q = Console.ReadLine();
-            Console.WriteLine(q);
+           // string index = Console.ReadLine();
+            
 
         }
 
@@ -49,9 +51,16 @@ namespace S10262513_PRG2Assignment
         {
             IceCreamList.Add(iceCream);
         }
-        public void DeleteIceCream(int id)
+        public void DeleteIceCream(int index)
         {
-            IceCreamList.RemoveAt(id);
+            if (index >= 0 && index < IceCreamList.Count)
+            {
+                IceCreamList.RemoveAt(index);
+            }
+            else
+            {
+                Console.WriteLine("Invalid index. Please enter a valid index.");
+            }
         }
         public double CalculateTotal() 
         {
