@@ -50,16 +50,18 @@ namespace S10262513_PRG2Assignment
         public void AddIceCream(IceCream iceCream)
         {
             IceCreamList.Add(iceCream);
+            Console.WriteLine($"Ice cream added successfully: {iceCream}");
         }
         public void DeleteIceCream(int index)
         {
             if (index >= 0 && index < IceCreamList.Count)
             {
                 IceCreamList.RemoveAt(index);
+                Console.WriteLine($"Ice cream with index {index} successfully deleted.");
             }
             else
             {
-                Console.WriteLine("Invalid index. Please enter a valid index.");
+                Console.WriteLine($"Invalid index: {index}. Please enter a valid index.");
             }
         }
         public double CalculateTotal() 
