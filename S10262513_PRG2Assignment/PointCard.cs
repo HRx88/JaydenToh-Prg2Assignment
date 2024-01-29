@@ -29,7 +29,6 @@ namespace S10262513_PRG2Assignment
         {
             Points = ps;
             PunchCard = pc;
-            
         }
 
         public void AddPoints(int amt)

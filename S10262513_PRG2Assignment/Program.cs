@@ -20,6 +20,8 @@ class Program
     static List<Customer> customersList = new List<Customer>();
     static Queue<Customer> orders = new Queue<Customer>();
     static List<Customer> tempList = customersList.ToList();
+    static Queue<Customer> goldQueue = new Queue<Customer>();
+    static Queue<Customer> regularQueue = new Queue<Customer>();
     static void DisplayMenu()
     {
         Console.WriteLine("---------------- Menu -----------------");
@@ -216,7 +218,7 @@ class Program
                         c[i].OrderHistory.Add(c[i].CurrentOrder);
 
                         if (c[i].Rewards.Tier == "Gold" || c[i].Rewards.Tier == "Ordinary")
-                        {
+                        {                 
                             Order ord = c[i].CurrentOrder;
 
                             //string sq = $"Order ID: {p.Id}\nTime Received: {p.TimeReceived}\nTime Fulfilled: {p.TimeFulfilled}\n\nIce Cream Details:\n";
@@ -264,13 +266,8 @@ class Program
 
                             //Console.WriteLine();
                     }
-                }
-
-
-                    
-                }
-
-               
+                }          
+              }       
             }
         }
     }
@@ -278,14 +275,123 @@ class Program
     // Option 3
     static void RegisterNewCustomer(List<Customer> c)
     {
+        try
+        {
+            Console.WriteLine("Enter name: ");
+            string name = Console.ReadLine();
 
+            Console.WriteLine("Enter id: ");
+            int id = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Enter date of birth (mm//dd/yyyy): ");
+            DateTime dob = Convert.ToDateTime(Console.ReadLine());
+
+            Customer nc = new Customer(name, id, dob);
+            
+            using (StreamWriter sw = new StreamWriter("customer.csv", true))
+            {
+                sw.WriteLine($"{name},{id}, {dob.ToString("MM/dd/yyyy")}, {nc.Rewards.Tier}, {nc.Rewards.Points}, {nc.Rewards.PunchCard}");
+            }
+
+            customersList.Add(nc);
+
+            Console.WriteLine("Registration Successful!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: {e.Message}");
+        }
     }
 
     // Option 4
-    static void CreateCustomerOrder(List<Customer> c)
+    static void CreateCustomerOrder(List<Customer> customersList)
     {
+        try
+        {
+            // List all customers
+            ListAllCustomers(customersList);
 
+            Console.WriteLine("Select a customer (enter MemberID): ");
+            int memId = Convert.ToInt32(Console.ReadLine());
+
+            // Retrieve the selected customer
+            Customer selectedCustomer = customersList.FirstOrDefault(customer => customer.MemberId == memId);
+
+            if (selectedCustomer != null)
+            {
+                // Create an order object
+                Order newOrder = new Order();
+
+                // Prompt user to enter ice cream order
+                do
+                {
+                    Console.WriteLine("Enter ice cream order details:");
+                    Console.Write("Option (cup/cone/waffle): ");
+                    string option = Console.ReadLine();
+
+                    Console.Write("Scoops (1-3): ");
+                    int scoops = Convert.ToInt32(Console.ReadLine());
+
+                    if (scoops < 1 || scoops > 3)
+                    {
+                        Console.WriteLine("Scoops must be between 1 and 3. Please try again.");
+                        continue;
+                    }
+
+                    // Add ice cream object to the order
+                    IceCream iceCream = CreateIceCream(option, scoops);
+                    newOrder.AddIceCream(iceCream);
+
+                    Console.Write("Do you want to add another ice cream to the order? (Y/N): ");
+                } while (Console.ReadLine().ToUpper() == "Y");
+
+                // Link the new order to the customer's current order
+                selectedCustomer.MakeOrder();
+                selectedCustomer.CurrentOrder = newOrder;
+
+                // Append the order to the appropriate queue
+                if (selectedCustomer.Rewards.Tier == "Gold")
+                {
+                    goldQueue.Enqueue(selectedCustomer);
+                }
+                else
+                {
+                    regularQueue.Enqueue(selectedCustomer);
+                }
+                foreach (Customer c in goldQueue)
+                {
+                    Console.WriteLine(c);
+                }
+                foreach (Customer c in regularQueue)
+                {
+                    Console.WriteLine(c);
+                }
+                Console.WriteLine("Order has been made successfully!");
+            }
+            else
+            {
+                Console.WriteLine("Customer not found!");
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error while creating customer order: {e.Message}");
+        }
     }
+
+    static IceCream CreateIceCream(string option, int scoops)
+    {
+        // Additional logic to create the proper ice cream object based on the given information
+        // You can expand this method based on your IceCream class structure
+
+        // Example: Creating a Cup with default flavors and toppings
+
+        List<Flavour> defaultFlavours = new List<Flavour> {new Flavour("Vanilla", false), new Flavour("Chocolate", false)};
+        List<Topping> defaultToppings = new List<Topping> { new Topping("Sprinkles"), new Topping("Cherry") };
+
+        return new Cup(option, scoops, defaultFlavours, defaultToppings);
+    }
+
 
     // Option 5
     // Display order details of a customer
