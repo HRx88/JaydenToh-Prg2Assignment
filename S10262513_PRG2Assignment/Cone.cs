@@ -20,7 +20,7 @@ namespace S10262513_PRG2Assignment
             
         }
 
-        public Cone(string o, int s, List<Flavour> f, List<Topping> t,bool d):base(o, s, f, t)
+        public Cone(string o, int s, List<Flavour> f, List<Topping> t,bool d=false):base(o, s, f, t)
         {
             Dipped = d;
         }
