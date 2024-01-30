@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using Microsoft.VisualBasic.FileIO;
 using System.Xml.Linq;
 using System.Security.Cryptography;
+using System.Diagnostics.Metrics;
 //==========================================================
 // Student Number : S10262513
 // Student Name : Tan Hong Rong
@@ -69,6 +70,14 @@ class Program
                 else if (choice == "6")
                 {
                     ModifyOrderDetails(customersList);
+                }
+                else if (choice == "7")
+                {
+                    ModifyOrderDetails(customersList);
+                }
+                else if (choice == "8")
+                {
+                    Display(customersList);
                 }
                 else
                 {
@@ -185,8 +194,10 @@ class Program
                 
                 foreach(string top in t)
                 {
-                   tList.Add(new Topping(top));
-
+                    if (!string.IsNullOrEmpty(top))
+                    {
+                        tList.Add(new Topping(top));
+                    }
                 }
                 IceCream iceCream;
                 
@@ -546,7 +557,7 @@ class Program
                                             }
                                             Console.WriteLine("Enter the number of scoops: ");
                                             int scoops = Convert.ToInt32(Console.ReadLine());
-                                            if (scoops > 3)
+                                            if (scoops > 3 && scoops > 0)
                                             {
                                                 Console.WriteLine("Scoops cannot be more than 3.");
                                                 continue;
@@ -576,14 +587,14 @@ class Program
                                                             }
                                                             else if (flavours != "Vanilla" || flavours != "Chocolate" || flavours != "Strawberry")
                                                             {
-                                                                Console.WriteLine("");
-                                                                continue;
+                                                                Console.WriteLine("Invalid flavour. choose either [Vanilla, Chocolate, Strawberry, Durian, Ube, Sea salt].");
+                                                                s--; // Re-ask for the current scoop
                                                             }
                                                             break;
                                                     }
 
                                                 }
-                                                while (true)
+                                                for (int t = 1; t < 5; t++)
                                                 {
                                                     Console.WriteLine($"Toppings ['Sprinkles', 'Mochi', 'Sago' , 'Oreos'] type 'X' to finish: ");
                                                     string toppings = Console.ReadLine();
@@ -597,15 +608,49 @@ class Program
                                                             break;
                                                         case "X":
                                                             // Exit the while loop if the user enters "X"
-                                                            return;
+                                                            break;
                                                         default:
 
                                                             Console.WriteLine("Invalid Topping. Please choose either ['Sprinkles', 'Mochi', 'Sago' , or 'Oreos'].");
-
+                                                            t--;
                                                             break;
                                                     }
                                                 }
+
+                                                foreach (IceCream ice in c[i].CurrentOrder.IceCreamList)
+                                                {
+                                                    counter += 1;
+                                                    Console.WriteLine("---------------- New Updated Order -----------------");
+                                                    Console.WriteLine($"IceCream {counter}:");
+                                                    Console.WriteLine($"Option: {ice.Option}");
+                                                    Console.WriteLine($"Scoops: {ice.Scoops}");
+
+                                                    if (ice is Cone)
+                                                    {
+                                                        Cone ce = (Cone)ice;
+                                                        Console.WriteLine($"Dipped: {ce.Dipped}");
+                                                    }
+                                                    else if (ice is Waffle)
+                                                    {
+                                                        Waffle w = (Waffle)ice;
+                                                        Console.WriteLine($"Waffle Flavour: {w.WaffleFlavour}");
+                                                    }
+                                                    Console.WriteLine("Flavours:");
+                                                    foreach (Flavour fla in ice.Flavours)
+                                                    {
+                                                        Console.WriteLine($"\t{fla.Type} (Premium: {fla.Premium}, Quantity: {fla.Quantity})");
+                                                    }
+                                                    Console.WriteLine("Toppings:");
+                                                    foreach (Topping top in ice.Toppings)
+                                                    {
+                                                        Console.WriteLine($"\t{top.Type}");
+                                                    }
+                                                    // Console.WriteLine();
+                                                }
+
+
                                             }
+
                                         }
                                         else
                                         {
@@ -714,6 +759,7 @@ class Program
                                     Console.WriteLine("which ice cream to delete");
                                     int id = Convert.ToInt32(Console.ReadLine());
                                     c[i].CurrentOrder.DeleteIceCream(id);
+                                    
 
                                 }
                                 else
@@ -723,7 +769,7 @@ class Program
                             }
                             else
                             {
-                                Console.WriteLine("invalid.");
+                                Console.WriteLine("Invalid Choice. Please enter a valid option by choosing from the provided menu [1, 2, 3]");
                                 continue;
                             }
                         }
@@ -733,6 +779,8 @@ class Program
                         Console.WriteLine(e.Message);
                     }
                 }
+                
+                
             }
 
         }
@@ -741,4 +789,111 @@ class Program
             Console.WriteLine(e.Message);
         }
     }
+
+
+    //ADVANCED FEATURES
+    //(b)Display monthly charged amounts breakdown & total charged amounts for the year
+    // prompt the user for the year
+    // retrieve all order objects that were successfully fulfilled within the inputted year
+    // compute and display the monthly charged amounts breakdown & the total charged
+    //amounts for the input year
+    static void Display(List<Customer> c)
+    {
+        try
+        {
+            Console.Write("Enter the year: ");
+            int year = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("");
+            Console.WriteLine("");
+            double MonthlyAmount = 0;
+            double TotalAmount = 0;
+            bool flag=false;
+            Dictionary<string,double> Charged = new Dictionary<string,double>();
+            foreach (Customer customer in c)
+            {
+                if (customer.OrderHistory != null )
+                {
+                    foreach (Order HistoryOrder in customer.OrderHistory.OrderBy(HistoryOrder => HistoryOrder.TimeFulfilled))
+                    {
+                        if (HistoryOrder.TimeFulfilled?.Year == year)
+                        {
+                            flag = true;
+                            double Amount = HistoryOrder.CalculateTotal();
+                            MonthlyAmount += Amount;
+                            string MonthYear = $"{HistoryOrder.TimeFulfilled?.ToString("MMM yyyy")}";
+                            if (Charged.ContainsKey(MonthYear))
+                            {
+                                Charged[MonthYear]=MonthlyAmount;
+                            }
+                            else
+                            {
+                                Charged.Add(MonthYear, MonthlyAmount);
+                            }
+                           
+
+                        }
+                       
+
+                    }
+                }
+            }
+            if (flag==true)
+            {
+                foreach (KeyValuePair<string, double> a in Charged)
+                {
+                    Console.WriteLine($"{a.Key}: {a.Value:c2}");
+                    TotalAmount += a.Value;
+                }
+                Console.WriteLine("");
+                
+                Console.WriteLine($"Total: {TotalAmount,9:c2}");
+            }
+            else 
+            { 
+                Console.WriteLine("year not found!");
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
+

@@ -50,7 +50,7 @@ namespace S10262513_PRG2Assignment
         public void AddIceCream(IceCream iceCream)
         {
             IceCreamList.Add(iceCream);
-            Console.WriteLine($"Ice cream added successfully: {iceCream}");
+           
         }
         public void DeleteIceCream(int index)
         {
