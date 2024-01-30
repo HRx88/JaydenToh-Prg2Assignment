@@ -37,6 +37,7 @@ namespace S10262513_PRG2Assignment
             MemberId = m;
             Dob = d;
             Rewards = new PointCard();
+            Rewards.Tier = "Ordinary";
            
 
 

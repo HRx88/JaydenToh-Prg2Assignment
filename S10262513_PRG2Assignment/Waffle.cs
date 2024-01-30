@@ -33,7 +33,7 @@ namespace S10262513_PRG2Assignment
                 price += 1;
 
             }
-            foreach (Flavour f in base.Flavours)
+            foreach (Flavour f in base.Flavours) // not sure if correct
             {
                 if (f.Premium==true)
                 {

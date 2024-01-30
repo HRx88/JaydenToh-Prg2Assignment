@@ -21,14 +21,19 @@ class Program
     static List<Customer> customersList = new List<Customer>();
     static Queue<Customer> orders = new Queue<Customer>();
     static List<Customer> tempList = customersList.ToList();
+    static Queue<Customer> goldQueue = new Queue<Customer>();
+    static Queue<Customer> regularQueue = new Queue<Customer>();
     static void DisplayMenu()
     {
         Console.WriteLine("---------------- Menu -----------------");
         Console.WriteLine("[1] List All Customers");
-        Console.WriteLine("[2] Register a New Customer");
-        Console.WriteLine("[3] Create a Customer's Order");
-        Console.WriteLine("[4] Display Order Details of a Customer");
-        Console.WriteLine("[5] Modify Order Details");
+        Console.WriteLine("[2] List All Current Orders");
+        Console.WriteLine("[3] Register a New Customer");
+        Console.WriteLine("[4] Create a Customer's Order");
+        Console.WriteLine("[5] Display Order Details of a Customer");
+        Console.WriteLine("[6] Modify Order Details");
+        Console.WriteLine("[7] Process an Order and Checkout");
+        Console.WriteLine("[8] Display monthly charged amounts breakdown & total charged amounts for the year");
         Console.WriteLine("[0] Exit");
         Console.WriteLine("--------------------------------------");
     }
@@ -71,14 +76,7 @@ class Program
                 {
                     ModifyOrderDetails(customersList);
                 }
-                else if (choice == "7")
-                {
-                    ModifyOrderDetails(customersList);
-                }
-                else if (choice == "8")
-                {
-                    Display(customersList);
-                }
+                else f
                 else
                 {
                     Console.WriteLine("Enter 1-8");
@@ -227,7 +225,7 @@ class Program
                         c[i].OrderHistory.Add(c[i].CurrentOrder);
 
                         if (c[i].Rewards.Tier == "Gold" || c[i].Rewards.Tier == "Ordinary")
-                        {
+                        {                 
                             Order ord = c[i].CurrentOrder;
 
                             //string sq = $"Order ID: {p.Id}\nTime Received: {p.TimeReceived}\nTime Fulfilled: {p.TimeFulfilled}\n\nIce Cream Details:\n";
@@ -275,13 +273,8 @@ class Program
 
                             //Console.WriteLine();
                     }
-                }
-
-
-                    
-                }
-
-               
+                }          
+              }       
             }
         }
     }
@@ -289,13 +282,185 @@ class Program
     // Option 3
     static void RegisterNewCustomer(List<Customer> c)
     {
+        try
+        {
+            Console.WriteLine("Enter name: ");
+            string name = Console.ReadLine();
 
+            Console.WriteLine("Enter id: ");
+            int id = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Enter date of birth (mm//dd/yyyy): ");
+            DateTime dob = Convert.ToDateTime(Console.ReadLine());
+
+            Customer nc = new Customer(name, id, dob);
+            
+            using (StreamWriter sw = new StreamWriter("customer.csv", true))
+            {
+                sw.WriteLine($"{name},{id}, {dob.ToString("MM/dd/yyyy")}, {nc.Rewards.Tier}, {nc.Rewards.Points}, {nc.Rewards.PunchCard}");
+            }
+
+            customersList.Add(nc);
+
+            Console.WriteLine("Registration Successful!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: {e.Message}");
+        }
     }
 
     // Option 4
-    static void CreateCustomerOrder(List<Customer> c)
+    static void CreateCustomerOrder(List<Customer> customersList)
     {
+        try
+        {
+            // List all customers
+            ListAllCustomers(customersList);
 
+            Console.WriteLine("Select a customer (enter MemberID): ");
+            int memId = Convert.ToInt32(Console.ReadLine());
+
+            // Retrieve the selected customer
+            Customer selectedCustomer = customersList.FirstOrDefault(customer => customer.MemberId == memId);
+
+            if (selectedCustomer != null)
+            {
+                // Create an order object
+                Order newOrder = new Order();
+
+                do
+                {
+                    Console.WriteLine("Enter ice cream order details:");
+                    Console.Write("Option (cup/cone/waffle): ");
+                    string option = Console.ReadLine();
+
+                    Console.Write("Scoops (1-3): ");
+                    int scoops = Convert.ToInt32(Console.ReadLine());
+
+                    if (scoops < 1 || scoops > 3)
+                    {
+                        Console.WriteLine("Scoops must be between 1 and 3. Please try again.");
+                        continue;
+                    }
+
+                    for (int i = 0; i < scoops; i++)
+                    {
+                        Console.WriteLine($"Enter details for Scoop #{i + 1}");
+                        IceCream iceCream = CreateIceCream(option, scoops);
+                        newOrder.AddIceCream(iceCream);
+                    }
+
+                    Console.Write("Do you want to add another ice cream to the order? (Y/N): ");
+                } while (Console.ReadLine().ToUpper() == "Y");
+
+                selectedCustomer.MakeOrder();
+                selectedCustomer.CurrentOrder = newOrder;
+
+                if (selectedCustomer.Rewards.Tier == "Gold")
+                {
+                    goldQueue.Enqueue(selectedCustomer);
+                }
+                else
+                {
+                    regularQueue.Enqueue(selectedCustomer);
+                }
+
+                foreach (Customer c in goldQueue)
+                {
+                    Console.WriteLine(c);
+                }
+
+                foreach (Customer c in regularQueue)
+                {
+                    Console.WriteLine(c);
+                }
+
+                Console.WriteLine("Order has been made successfully!");
+            }
+            else
+            {
+                Console.WriteLine("Customer not found!");
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error while creating customer order: {e.Message}");
+        }
+    }
+
+    static IceCream CreateIceCream(string option, int scoops)
+    {
+        Console.WriteLine("Available Flavours:");
+        Console.WriteLine("1. Vanilla (Regular)");
+        Console.WriteLine("2. Chocolate (Regular)");
+        Console.WriteLine("3. Strawberry (Regular)");
+        Console.WriteLine("4. Durian (Premium)");
+        Console.WriteLine("5. Ube (Premium)");
+        Console.WriteLine("6. Sea salt (Premium)");
+
+        Console.Write($"Enter the flavour (1-6): ");
+        int flavorChoice = Convert.ToInt32(Console.ReadLine());
+
+        // Create a list to hold the selected flavour
+        List<Flavour> selectedFlavour = new List<Flavour>();
+        selectedFlavour.Add(GetFlavour(flavorChoice));
+
+        Console.WriteLine("Available Toppings:");
+        Console.WriteLine("1. Sprinkles");
+        Console.WriteLine("2. Mochi");
+        Console.WriteLine("3. Sago");
+        Console.WriteLine("4. Oreos");
+
+        Console.Write("Enter the topping (1-4): ");
+        int toppingChoice = Convert.ToInt32(Console.ReadLine());
+
+        // Create a list to hold the selected topping
+        List<Topping> selectedTopping = new List<Topping>();
+        selectedTopping.Add(GetTopping(toppingChoice));
+
+        return new Cup(option, scoops, selectedFlavour, selectedTopping);
+    }
+
+
+    static Flavour GetFlavour(int flavorChoice)
+    {
+        switch (flavorChoice)
+        {
+            case 1:
+                return new Flavour("Vanilla", false);
+            case 2:
+                return new Flavour("Chocolate", false);
+            case 3:
+                return new Flavour("Strawberry", false);
+            case 4:
+                return new Flavour("Durian", true);
+            case 5:
+                return new Flavour("Ube", true);
+            case 6:
+                return new Flavour("Sea salt", true);
+            default:
+                Console.WriteLine("Invalid flavor choice. Defaulting to Vanilla.");
+                return new Flavour("Vanilla", false);
+        }
+    }
+
+    static Topping GetTopping(int toppingChoice)
+    {
+        switch (toppingChoice)
+        {
+            case 1:
+                return new Topping("Sprinkles");
+            case 2:
+                return new Topping("Mochi");
+            case 3:
+                return new Topping("Sago");
+            case 4:
+                return new Topping("Oreos");
+            default:
+                Console.WriteLine("Invalid topping choice. Defaulting to Sprinkles.");
+                return new Topping("Sprinkles");
+        }
     }
 
     // Option 5
