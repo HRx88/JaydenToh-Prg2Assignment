@@ -23,6 +23,7 @@ namespace S10262513_PRG2Assignment
 
         public List<IceCream> IceCreamList { get; set; }= new List<IceCream>();
 
+        
         public Order()
         {
             
@@ -42,7 +43,9 @@ namespace S10262513_PRG2Assignment
             Console.WriteLine("[1]choose an existing ice cream object to modify");
             Console.WriteLine("[2] add an entirely new ice cream object to the order");
             Console.WriteLine("[3] choose an existing ice cream object to delete from the order");
-           // string index = Console.ReadLine();
+            
+
+           
             
 
         }
@@ -57,6 +60,7 @@ namespace S10262513_PRG2Assignment
             if (index >= 0 && index < IceCreamList.Count)
             {
                 IceCreamList.RemoveAt(index);
+                
                 Console.WriteLine($"Ice cream with index {index} successfully deleted.");
             }
             else
