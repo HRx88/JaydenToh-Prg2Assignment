@@ -31,6 +31,8 @@ class Program
         Console.WriteLine("[4] Create a Customer's Order");
         Console.WriteLine("[5] Display Order Details of a Customer");
         Console.WriteLine("[6] Modify Order Details");
+        Console.WriteLine("[7] Process an Order and Checkout");
+        Console.WriteLine("[8] Display monthly charged amounts breakdown & total charged amounts for the year");
         Console.WriteLine("[0] Exit");
         Console.WriteLine("--------------------------------------");
     }
@@ -73,6 +75,7 @@ class Program
                 {
                     ModifyOrderDetails(customersList);
                 }
+                else f
                 else
                 {
                     Console.WriteLine("Enter 1-8");
