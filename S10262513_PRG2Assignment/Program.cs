@@ -26,10 +26,11 @@ class Program
     {
         Console.WriteLine("---------------- Menu -----------------");
         Console.WriteLine("[1] List All Customers");
-        Console.WriteLine("[2] Register a New Customer");
-        Console.WriteLine("[3] Create a Customer's Order");
-        Console.WriteLine("[4] Display Order Details of a Customer");
-        Console.WriteLine("[5] Modify Order Details");
+        Console.WriteLine("[2] List All Current Orders");
+        Console.WriteLine("[3] Register a New Customer");
+        Console.WriteLine("[4] Create a Customer's Order");
+        Console.WriteLine("[5] Display Order Details of a Customer");
+        Console.WriteLine("[6] Modify Order Details");
         Console.WriteLine("[0] Exit");
         Console.WriteLine("--------------------------------------");
     }
@@ -322,7 +323,6 @@ class Program
                 // Create an order object
                 Order newOrder = new Order();
 
-                // Prompt user to enter ice cream order
                 do
                 {
                     Console.WriteLine("Enter ice cream order details:");
@@ -338,18 +338,19 @@ class Program
                         continue;
                     }
 
-                    // Add ice cream object to the order
-                    IceCream iceCream = CreateIceCream(option, scoops);
-                    newOrder.AddIceCream(iceCream);
+                    for (int i = 0; i < scoops; i++)
+                    {
+                        Console.WriteLine($"Enter details for Scoop #{i + 1}");
+                        IceCream iceCream = CreateIceCream(option, scoops);
+                        newOrder.AddIceCream(iceCream);
+                    }
 
                     Console.Write("Do you want to add another ice cream to the order? (Y/N): ");
                 } while (Console.ReadLine().ToUpper() == "Y");
 
-                // Link the new order to the customer's current order
                 selectedCustomer.MakeOrder();
                 selectedCustomer.CurrentOrder = newOrder;
 
-                // Append the order to the appropriate queue
                 if (selectedCustomer.Rewards.Tier == "Gold")
                 {
                     goldQueue.Enqueue(selectedCustomer);
@@ -358,14 +359,17 @@ class Program
                 {
                     regularQueue.Enqueue(selectedCustomer);
                 }
+
                 foreach (Customer c in goldQueue)
                 {
                     Console.WriteLine(c);
                 }
+
                 foreach (Customer c in regularQueue)
                 {
                     Console.WriteLine(c);
                 }
+
                 Console.WriteLine("Order has been made successfully!");
             }
             else
@@ -381,17 +385,77 @@ class Program
 
     static IceCream CreateIceCream(string option, int scoops)
     {
-        // Additional logic to create the proper ice cream object based on the given information
-        // You can expand this method based on your IceCream class structure
+        Console.WriteLine("Available Flavours:");
+        Console.WriteLine("1. Vanilla (Regular)");
+        Console.WriteLine("2. Chocolate (Regular)");
+        Console.WriteLine("3. Strawberry (Regular)");
+        Console.WriteLine("4. Durian (Premium)");
+        Console.WriteLine("5. Ube (Premium)");
+        Console.WriteLine("6. Sea salt (Premium)");
 
-        // Example: Creating a Cup with default flavors and toppings
+        Console.Write($"Enter the flavour (1-6): ");
+        int flavorChoice = Convert.ToInt32(Console.ReadLine());
 
-        List<Flavour> defaultFlavours = new List<Flavour> {new Flavour("Vanilla", false), new Flavour("Chocolate", false)};
-        List<Topping> defaultToppings = new List<Topping> { new Topping("Sprinkles"), new Topping("Cherry") };
+        // Create a list to hold the selected flavour
+        List<Flavour> selectedFlavour = new List<Flavour>();
+        selectedFlavour.Add(GetFlavour(flavorChoice));
 
-        return new Cup(option, scoops, defaultFlavours, defaultToppings);
+        Console.WriteLine("Available Toppings:");
+        Console.WriteLine("1. Sprinkles");
+        Console.WriteLine("2. Mochi");
+        Console.WriteLine("3. Sago");
+        Console.WriteLine("4. Oreos");
+
+        Console.Write("Enter the topping (1-4): ");
+        int toppingChoice = Convert.ToInt32(Console.ReadLine());
+
+        // Create a list to hold the selected topping
+        List<Topping> selectedTopping = new List<Topping>();
+        selectedTopping.Add(GetTopping(toppingChoice));
+
+        return new Cup(option, scoops, selectedFlavour, selectedTopping);
     }
 
+
+    static Flavour GetFlavour(int flavorChoice)
+    {
+        switch (flavorChoice)
+        {
+            case 1:
+                return new Flavour("Vanilla", false);
+            case 2:
+                return new Flavour("Chocolate", false);
+            case 3:
+                return new Flavour("Strawberry", false);
+            case 4:
+                return new Flavour("Durian", true);
+            case 5:
+                return new Flavour("Ube", true);
+            case 6:
+                return new Flavour("Sea salt", true);
+            default:
+                Console.WriteLine("Invalid flavor choice. Defaulting to Vanilla.");
+                return new Flavour("Vanilla", false);
+        }
+    }
+
+    static Topping GetTopping(int toppingChoice)
+    {
+        switch (toppingChoice)
+        {
+            case 1:
+                return new Topping("Sprinkles");
+            case 2:
+                return new Topping("Mochi");
+            case 3:
+                return new Topping("Sago");
+            case 4:
+                return new Topping("Oreos");
+            default:
+                Console.WriteLine("Invalid topping choice. Defaulting to Sprinkles.");
+                return new Topping("Sprinkles");
+        }
+    }
 
     // Option 5
     // Display order details of a customer
