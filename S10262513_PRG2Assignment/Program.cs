@@ -22,6 +22,7 @@ class Program
     static List<Customer> tempList = customersList.ToList();
     static Queue<Customer> goldQueue = new Queue<Customer>();
     static Queue<Customer> regularQueue = new Queue<Customer>();
+    static Queue<Order> orderQueue = new Queue<Order>();
     static void DisplayMenu()
     {
         Console.WriteLine("---------------- Menu -----------------");
@@ -75,7 +76,10 @@ class Program
                 {
                     ModifyOrderDetails(customersList);
                 }
-                else f
+                else if (choice == "7")
+                {
+                    ProcessOrderAndCheckout(orderQueue);
+                }
                 else
                 {
                     Console.WriteLine("Enter 1-8");
@@ -912,6 +916,108 @@ class Program
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
+        }
+    }
+
+    static void ProcessOrderAndCheckout(Queue<Order> orderQueue)
+    {
+
+        // Dequeue the first order in the queue
+        if (orderQueue.Count > 0)
+        {
+            Order currentOrder = orderQueue.Dequeue();
+
+            // Display all ice creams in the order
+            Console.WriteLine("Ice Creams in the Order:");
+            foreach (IceCream iceCream in currentOrder.IceCreamList)
+            {
+                Console.WriteLine(iceCream);
+            }
+
+            // Display the total bill amount
+            double totalBill = currentOrder.CalculateTotal();
+            Console.WriteLine($"Total Bill Amount: {totalBill:C}");
+
+            // Get the customer associated with the order
+            Customer customer = customersList.FirstOrDefault(c => c.CurrentOrder == currentOrder);
+
+            if (customer != null)
+            {
+                // Display membership status and points of the customer
+                Console.WriteLine($"Membership Status: {customer.Rewards.Tier}");
+                Console.WriteLine($"Membership Points: {customer.Rewards.Points}");
+
+                // Check if it's the customer's birthday
+                if (customer.IsBirthday())
+                {
+                    // Calculate the final bill with the most expensive ice cream costing 0.00
+                    IceCream mostExpensiveIceCream = currentOrder.IceCreamList.OrderByDescending(ic => ic.CalculatePrice()).FirstOrDefault();
+                    if (mostExpensiveIceCream != null)
+                    {
+                        totalBill -= mostExpensiveIceCream.CalculatePrice();
+                        Console.WriteLine($"Birthday Discount Applied: Most Expensive Ice Cream is Free");
+                    }
+                }
+
+                // Check if the customer has completed their punch card
+                if (customer.Rewards.PunchCard >= 10)
+                {
+                    // Calculate the final bill with the first ice cream costing 0.00 and reset the punch card
+                    if (currentOrder.IceCreamList.Count > 0)
+                    {
+                        totalBill -= currentOrder.IceCreamList.First().CalculatePrice();
+                        customer.Rewards.PunchCard = 0;
+                        Console.WriteLine($"Punch Card Reward Applied: First Ice Cream is Free, Punch Card Reset");
+                    }
+                }
+
+                // Check PointCard status to determine if the customer can redeem points
+                if (customer.Rewards.Tier == "Gold" || customer.Rewards.Tier == "Sliver")
+                {
+                    Console.Write("Enter the number of points you want to use to offset the final bill: ");
+                    int pointstouse = Convert.ToInt32(Console.ReadLine());
+                    if (pointstouse > 0 && pointstouse <= customer.Rewards.Points)
+                    {
+                        // Redeem points if necessary
+                        customer.Rewards.RedeemPoints(pointstouse);
+                        Console.WriteLine($"Points Redeemed: {pointstouse}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid points entered or not enough points. Points redemption skipped.");
+                    }
+                }
+
+                // Display the final total bill amount
+                Console.WriteLine($"Final Total Bill Amount: {totalBill:C}");
+
+                // Prompt user to press any key to make payment
+                Console.WriteLine("Press any key to make payment...");
+
+                // Increment the punch card for every ice cream in the order (if it goes above 10, set it back down to 10)
+                foreach (IceCream iceCream in currentOrder.IceCreamList)
+                {
+                    customer.Rewards.PunchCard++;
+                    if (customer.Rewards.PunchCard > 10)
+                    {
+                        customer.Rewards.PunchCard = 10;
+                    }
+                }
+
+                // Earn points and upgrade the member status accordingly
+                customer.Rewards.AddPoints(Convert.ToInt32(totalBill));
+                //customer.Rewards.CheckTierUpgrade();
+
+                // Mark the order as fulfilled with the current datetime
+                currentOrder.TimeFulfilled = DateTime.Now;
+
+                // Add the fulfilled order object to the customer's order history
+                customer.OrderHistory.Add(currentOrder);
+            }
+        }
+        else
+        {
+            Console.WriteLine("No orders in the queue to process.");
         }
     }
 }
