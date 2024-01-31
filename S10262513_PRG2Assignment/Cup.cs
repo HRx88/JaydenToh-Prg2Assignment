@@ -30,7 +30,10 @@ namespace S10262513_PRG2Assignment
             }
             foreach (Flavour f in base.Flavours) // not sure if correct
             {
-                price += f.Premium ? 2 * f.Quantity : f.Quantity;
+                if (f.Premium == true)
+                {
+                    price += (2 * f.Quantity);
+                }
             }
             switch (base.Scoops)
             {

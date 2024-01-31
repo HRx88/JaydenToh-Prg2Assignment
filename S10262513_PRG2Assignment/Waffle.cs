@@ -35,45 +35,52 @@ namespace S10262513_PRG2Assignment
             }
             foreach (Flavour f in base.Flavours) // not sure if correct
             {
-                price += f.Premium ? 2 * f.Quantity : f.Quantity;
+                if (f.Premium==true)
+                {
+                    price += (2 * f.Quantity);
+                }
             }
             switch (base.Scoops)
             {
-                case 2:
-                    if (WaffleFlavour != "Original") // Check if a waffle flavor is selected
+                case 1:
+                    if (WaffleFlavour != "Original")
                     {
-                        price += 8.50+3;
-                        return price;
-                    }
-                    else
-                    {
-                        price += 8.50;
-                        return price;
-                    }
-                case 3:
-                    if (WaffleFlavour != "Original") // Check if a waffle flavor is selected
-                    {
-                        price += 9.50 + 3;
-                        return price;
-                    }
-                    else
-                    {
-                        price += 9.50;
-                        return price;
-                    }
-                default:
-                    if (WaffleFlavour != "Original") // Check if a waffle flavor is selected
-                    {
-                        price += 7.00 + 3;
-                        return price;
+                        price += (7.00 + 3);
+                      
                     }
                     else
                     {
                         price += 7.00;
-                        return price;
+                        
                     }
-
+                    break;
+                case 2:
+                    if (WaffleFlavour != "Original") 
+                    {
+                        price += 8.50+3;
+                        
+                    }
+                    else
+                    {
+                        price += 8.50;
+                        
+                    }
+                    break;
+                case 3:
+                    if (WaffleFlavour != "Original") 
+                    {
+                        price += 9.50 + 3;
+                        
+                    }
+                    else
+                    {
+                        price += 9.50;
+                        
+                    }
+                    break;
+                
             }
+            return price;
         }
 
         public override string ToString()

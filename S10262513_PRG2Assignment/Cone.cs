@@ -31,48 +31,55 @@ namespace S10262513_PRG2Assignment
             foreach (Topping t in base.Toppings)
             {
                 price += 1;
-                
+
             }
-            foreach(Flavour f in base.Flavours)  // not sure if correct
+            foreach (Flavour f in base.Flavours)
             {
-                price += f.Premium ? 2 * f.Quantity : f.Quantity;
+                if (f.Premium == true)
+                {
+                    price += (2 * f.Quantity);
+                }
             }
             switch (base.Scoops)
             {
-                case 2:
-                    if (Dipped)//need put ==true???
-                    {
-                        price += 5.50 + 2;
-                        return price;
-                    }
-                    else
-                    {
-                        price += 5.50;
-                        return price;
-                    }
-                case 3:
-                    if (Dipped)
-                    {
-                        price += 6.50 + 2;
-                        return price;
-                    }
-                    else
-                    {
-                        price += 6.50;
-                        return price;
-                    }
-                default:
-                    if (Dipped)
+                case 1:
+                    if (Dipped == true)
                     {
                         price += 4.00 + 2;
-                        return price;
+                        
                     }
                     else
                     {
                         price += 4.00;
-                        return price;
+                        
                     }
+                    break;
+                case 2:
+                    if (Dipped==true)//need put ==true???
+                    {
+                        price += 5.50 + 2;
+                        
+                    }
+                    else
+                    {
+                        price += 5.50;
+                        
+                    }
+                    break;
+                case 3:
+                    if (Dipped == true)
+                    {
+                        price += 6.50 + 2;
+                        
+                    }
+                    else
+                    {
+                        price += 6.50;
+                      
+                    } 
+                    break;
             }
+            return price;
         }
 
         public override string ToString()
